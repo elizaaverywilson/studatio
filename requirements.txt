@@ -1,0 +1,3 @@
+pyperclip~=1.8.2
+DateTime~=4.3
+icalevents==0.1.26

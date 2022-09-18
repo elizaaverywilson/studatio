@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/studioCalendarExporter.iml" filepath="$PROJECT_DIR$/.idea/studioCalendarExporter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../studatio/.idea/studatio.iml" filepath="$PROJECT_DIR$/../studatio/.idea/studatio.iml" />
     </modules>
   </component>
 </project>
