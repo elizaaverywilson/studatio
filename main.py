@@ -4,8 +4,7 @@ import pyperclip
 
 import cal_handler
 
-
-if __name__ == '__main__':
+def main():
     if len(sys.argv) == 1:
         export_str = str(cal_handler.export())
     elif len(sys.argv) == 2 or len(sys.argv) == 3:
@@ -30,3 +29,6 @@ if __name__ == '__main__':
         raise AttributeError()
     print(export_str)
     pyperclip.copy(export_str)
+
+if __name__ == "__main__":
+    main()
