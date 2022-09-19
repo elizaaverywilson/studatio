@@ -1,25 +1,24 @@
-from enum import Enum, auto
+from enum import IntEnum, auto, unique
 
 
-# noinspection PyMethodParameters
-class AutoName(Enum):
-    def _generate_next_value_(name, start, count, last_values):
-        return name
-
+# using IntEnums allows for sorting by preference smoothly
+class AutoName(IntEnum):
     def __str__(self):
         return self.name.capitalize()
 
 
+@unique
 class StudioEventType(AutoName):
-    LESSON = auto()
-    CLASS = auto()
-    CLASS_PERFORMANCE = auto()
-    RECITAL = auto()
-    DRESS_RECITAL = auto()
-    OTHER = auto()
+    LESSON = 1
+    CLASS = 2
+    CLASS_PERFORMANCE = 3
+    RECITAL = 4
+    DRESS_RECITAL = 5
+    OTHER = 6
 
 
+@unique
 class Instrument(AutoName):
-    VIOLIN = auto()
-    FIDDLE = auto()
-    VIOLA = auto()
+    VIOLIN = 1
+    VIOLA = 2
+    FIDDLE = 3

@@ -4,7 +4,8 @@ from enums import StudioEventType
 
 
 class StudioEvent:
-    def __init__(self, start_time: datetime, end_time: datetime, kind: StudioEventType, instruments: set, plural=False):
+    def __init__(self, start_time: datetime, end_time: datetime, kind: StudioEventType, instruments: set,
+                 plural: object = False):
         if start_time.date == end_time.date:
             raise ValueError('Multi-day events?')
         self.start_time = start_time
@@ -26,14 +27,22 @@ class StudioEvent:
             pl = ''
         instr = ''
         if len(self.instruments) >= 1:
-            i = 1
+
+            # convert self.instruments to a list, so we can sort it.
+            instruments_list = []
             for instrument in self.instruments:
+                instruments_list.append(instrument)
+            instruments_list.sort()
+
+            i = 1
+            for instrument in instruments_list:
                 if i == 1:
                     instr = str(instrument)
                 else:
                     instr += '/' + str(instrument)
                 i += 1
             instr += ' '
+
         time_format = '%I:%M %p'
         return self.date().strftime('%b %d %Y ') + \
             instr + \
