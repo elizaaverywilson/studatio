@@ -14,8 +14,8 @@ def main():
             int(month_str)
             months = [int(month_str)]
         except ValueError:
-            monthBounds = month_str.split('-')
-            months = list(range(int(monthBounds[0]), int(monthBounds[1]) + 1))
+            month_bounds = month_str.split('-')
+            months = list(range(int(month_bounds[0]), int(month_bounds[1]) + 1))
         export_str = ''
         i = 1
         for month in months:
@@ -30,6 +30,7 @@ def main():
         raise AttributeError()
     print(export_str)
     pyperclip.copy(export_str)
+
 
 if __name__ == "__main__":
     main()

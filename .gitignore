@@ -1,0 +1,5 @@
+/.cache/**
+p30*
+env/**
+.idea/**
+.pytest_cache/**
