@@ -1,7 +1,12 @@
 import calendar
 from datetime import datetime
 
-from icalevents import icalevents
+try:
+    # for CLI/script access
+    from icalevents.icalevents import icalevents
+except ImportError:
+    # for package access
+    from icalevents import icalevents
 
 from enums import StudioEventType, Instrument
 from events import StudioEvent
@@ -9,7 +14,6 @@ from events import StudioEvent
 
 def export(month: int = datetime.now().month, year: int = datetime.now().year):
     events = fetch_events(year, month)
-    events.sort()
     parsed_events = parse_events(events)
     combine_adjacent_events(parsed_events)
 
@@ -55,8 +59,8 @@ def fetch_events(year: int, month: int):
 
     url = '***REMOVED***' \
           '***REMOVED***'
-    events = icalevents.events(url=url, fix_apple=True, start=month_dates[0], end=month_dates[-1])
-    return events
+    eventsaf = icalevents.events(url=url, fix_apple=True, start=month_dates[0], end=month_dates[-1])
+    return eventsaf
 
 
 def parse_events(events):
