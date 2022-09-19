@@ -1,9 +1,9 @@
-#!/usr/local/bin/python3
 import sys
 
 import pyperclip
 
 import cal_handler
+
 
 def main():
     if len(sys.argv) == 1:
