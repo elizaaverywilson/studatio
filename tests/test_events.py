@@ -6,7 +6,7 @@ from events import StudioEvent
 start, end = datetime.datetime(2007, 2, 5, 3, 10, 0), datetime.datetime(2007, 2, 5, 4, 10, 0)
 
 
-class TestSimpleEvent():
+class TestSimpleEvent:
     event = StudioEvent(start, end, StudioEventType.LESSON, {Instrument.VIOLA})
 
     def test_date(self):
@@ -22,7 +22,7 @@ class TestSimpleEvent():
         assert 'Viola' in str(self.event)
 
 
-class TestMultiple():
+class TestMultiple:
     event = StudioEvent(start, end, StudioEventType.LESSON, {Instrument.VIOLIN, Instrument.VIOLA, Instrument.FIDDLE},
                         True)
 

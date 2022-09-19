@@ -15,17 +15,18 @@ from events import StudioEvent
 def export(month: int = datetime.now().month, year: int = datetime.now().year):
     events = fetch_events(year, month)
     parsed_events = parse_events(events)
-    combine_adjacent_events(parsed_events)
+    combined_events = combine_adjacent_events(parsed_events)
 
     event_list_string = ''
-    for event in parsed_events:
+    for event in combined_events:
         event_list_string = event_list_string + str(event) + '\n'
 
     return event_list_string
 
 
 def combine_adjacent_events(events: list):
-    for event in events:
+    events_copy = events
+    for event in events_copy:
         try:
             # noinspection PyUnboundLocalVariable
             previous_event
@@ -33,7 +34,7 @@ def combine_adjacent_events(events: list):
             previous_event = event
         else:
             if previous_event.end_time == event.start_time and previous_event.kind == event.kind:
-                events.remove(previous_event)
+                events_copy.remove(previous_event)
                 combined_instruments = previous_event.instruments.union(event.instruments)
                 combined_event = StudioEvent(start_time=previous_event.start_time,
                                              end_time=event.end_time,
@@ -42,10 +43,12 @@ def combine_adjacent_events(events: list):
                                              plural=True)
 
                 i = events.index(event)
-                events.insert(i, combined_event)
-                events.remove(event)
+                events_copy.insert(i, combined_event)
+                events_copy.remove(event)
 
             previous_event = event
+    return events_copy
+
 
 
 def fetch_events(year: int, month: int):
