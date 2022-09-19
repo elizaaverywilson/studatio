@@ -1,11 +1,16 @@
 import datetime
 
-from enums import StudioEventType
+from enums import StudioEventType, Instrument
 
 
 class StudioEvent:
-    def __init__(self, start_time: datetime, end_time: datetime, kind: StudioEventType, instruments: set,
+    def __init__(self, start_time: datetime = datetime.datetime.now(),
+                 end_time: datetime = datetime.datetime.now(),
+                 kind: StudioEventType = StudioEventType.LESSON,
+                 instruments: set = None,
                  plural: object = False):
+        if instruments is None:
+            instruments = {Instrument.VIOLIN}
         if start_time.date == end_time.date:
             raise ValueError('Multi-day events?')
         self.start_time = start_time
