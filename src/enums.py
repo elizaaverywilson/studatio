@@ -1,4 +1,4 @@
-from enum import IntEnum, auto, unique
+from enum import IntEnum, unique
 
 
 # using IntEnums allows for sorting by preference smoothly
