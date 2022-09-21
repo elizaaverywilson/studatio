@@ -1,4 +1,0 @@
-pyperclip==1.8.2
-git+https://github.com/jazzband/icalevents@412f256
-
-pytest==7.1.3

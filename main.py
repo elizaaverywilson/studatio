@@ -32,5 +32,5 @@ def main():
     pyperclip.copy(export_str)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
