@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Default 2022" pattern="!file:pyproject.toml" />
+</component>
