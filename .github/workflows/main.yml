@@ -25,4 +25,4 @@ jobs:
           poetry install
       - name: Test with pytest
         run: |
-          poetry run coverage run test.py
+          poetry run test.py
