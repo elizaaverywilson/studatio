@@ -24,5 +24,5 @@ jobs:
           pip install poetry==1.2.1
           poetry install
       - name: Test with pytest
-        run: |
-          poetry run pytest
+        run:
+          python -m pytest
