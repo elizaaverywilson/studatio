@@ -1,6 +1,9 @@
 import calendar
 from datetime import datetime
 
+import config_handler
+from config_handler import Settings
+
 try:
     # for CLI/script access
     from icalevents.icalevents import icalevents
@@ -59,10 +62,18 @@ def fetch_events(year: int, month: int):
         if date.month == month:
             month_dates.append(date)
 
-    url = '***REMOVED***' \
-          '***REMOVED***'
-    eventsaf = icalevents.events(url=url, fix_apple=True, start=month_dates[0], end=month_dates[-1])
-    return eventsaf
+    settings = Settings()
+    config_str = config_handler.read_config(settings)
+    if not config_str:
+        config_handler.new_config(settings)
+
+    should_rewrite_config = settings.setup(config_str)
+    if should_rewrite_config is True:
+        config_handler.write_config(settings)
+
+    calendar_url = settings.calendar_url
+    events = icalevents.events(url=calendar_url, fix_apple=True, start=month_dates[0], end=month_dates[-1])
+    return events
 
 
 def parse_events(events):
@@ -71,7 +82,9 @@ def parse_events(events):
     for event in events:
         start_time = event.start
         end_time = event.end
-        if 'Lesson' in event.summary:
+        if 'Trial Lesson' in event.summary:
+            kind = StudioEventType.TRIAL_LESSON
+        elif 'Lesson' in event.summary:
             kind = StudioEventType.LESSON
         elif 'Class Performance' in event.summary:
             kind = StudioEventType.CLASS_PERFORMANCE

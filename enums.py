@@ -9,6 +9,7 @@ class AutoName(IntEnum):
 
 @unique
 class StudioEventType(AutoName):
+    TRIAL_LESSON = 0
     LESSON = 1
     CLASS = 2
     CLASS_PERFORMANCE = 3

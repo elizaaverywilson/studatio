@@ -2,7 +2,7 @@
 name = "studatio"
 version = "0.1.0"
 description = "Personal tool for my violin teaching database"
-authors = ["Your Name <you@example.com>"]
+authors = ["Eliza Wilson <elizaaverywilson@gmail.com"]
 license = "n"
 readme = "README.md"
 
@@ -11,6 +11,7 @@ python = "^3.10"
 pyperclip = "^1.8.2"
 icalevents = {git = "https://github.com/jazzband/icalevents", rev = "412f256"}
 pre-commit = "^2.20.0"
+tomlkit = "^0.11.4"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.1.3"
