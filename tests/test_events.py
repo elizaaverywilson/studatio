@@ -1,7 +1,7 @@
 import datetime
 
-from enums import Instrument, StudioEventType
-from events import StudioEvent
+from studatio.enums import Instrument, StudioEventType
+from studatio.events import StudioEvent
 
 start, end = datetime.datetime(2007, 2, 5, 3, 10, 0), datetime.datetime(2007, 2, 5, 4, 10, 0)
 

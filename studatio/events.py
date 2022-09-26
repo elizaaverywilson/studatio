@@ -24,7 +24,7 @@ class StudioEvent:
 
     def __str__(self):
         if self.plural is True:
-            if self.kind is not StudioEventType.LESSON:
+            if self.kind != StudioEventType.LESSON:
                 raise NotImplementedError('Unsupported plural event type.')
             else:
                 pl = 's'

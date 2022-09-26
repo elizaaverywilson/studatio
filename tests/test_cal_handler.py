@@ -9,11 +9,11 @@ def change_test_dir(request, monkeypatch):
 
 
 # noinspection PyPep8
-from enums import Instrument
+from studatio.enums import Instrument
 # noinspection PyPep8
-import cal_handler
+from studatio import cal_handler
 # noinspection PyPep8
-from events import StudioEvent
+from studatio.events import StudioEvent
 
 
 class TestCombine:
