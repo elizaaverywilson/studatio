@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "studatio"
-version = "0.1.0"
+version = "0.1.2"
 description = "Personal tool for my violin teaching database"
 authors = ["Eliza Wilson <elizaaverywilson@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.9, <3.11"
 pyperclip = "^1.8.2"
 tomlkit = "^0.11.4"
 

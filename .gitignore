@@ -2,3 +2,4 @@
 p30*
 env/**
 .pytest_cache/**
+!/dist/
