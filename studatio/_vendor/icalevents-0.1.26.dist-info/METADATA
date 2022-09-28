@@ -1,0 +1,64 @@
+Metadata-Version: 2.1
+Name: icalevents
+Version: 0.1.26
+Summary: Simple Python 3 library to download, parse and query iCal sources.
+License: MIT Licence
+Author: Martin Eigenmann
+Author-email: github@eigenmannmartin.ch
+Requires-Python: >=3.9,<4.0
+Classifier: License :: Other/Proprietary License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Requires-Dist: DateTime (==4.3)
+Requires-Dist: httplib2 (==0.20.1)
+Requires-Dist: icalendar (==4.0.9)
+Requires-Dist: python-dateutil (==2.8.2)
+Requires-Dist: pytz (==2021.3)
+Description-Content-Type: text/markdown
+
+# iCalEvents
+
+Simple Python 3 library to download, parse and query iCal sources.
+
+[![PyPI version](https://badge.fury.io/py/icalevnt.svg)](https://badge.fury.io/py/icalevnt)[![Jazzband](https://jazzband.co/static/img/badge.svg)](https://jazzband.co/)
+
+## Build info
+
+last push: ![run pytest](https://github.com/jazzband/icalevents/actions/workflows/python-test.yml/badge.svg)
+
+master: [![Run pytest](https://github.com/jazzband/icalevents/actions/workflows/python-test.yml/badge.svg?branch=master)](https://github.com/jazzband/icalevents/actions/workflows/python-test.yml)
+
+## Documentation
+
+https://icalevents.readthedocs.io/en/latest/
+
+## Usage
+
+### iCloud:
+
+```python
+
+from icalevents.icalevents import events
+
+es  = events(<iCloud URL>, fix_apple=True)
+```
+
+### Google:
+
+```python
+
+from icalevents.icalevents import events
+
+es  = events(<Google Calendar URL>)
+```
+
+# Contributing
+
+You will need [poetry](https://github.com/python-poetry/poetry) and [pre-commit](https://pre-commit.com/index.html) installed and than run.
+
+```bash
+pre-commit install
+```
+
+Happy contributing!
