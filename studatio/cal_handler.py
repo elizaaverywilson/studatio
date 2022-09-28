@@ -6,10 +6,10 @@ from config_handler import Settings
 
 try:
     # for CLI/script access
-    from icalevents.icalevents import icalevents
+    from _vendor.icalevents.icalevents import icalevents
 except ImportError:
     # for package access
-    from icalevents import icalevents
+    from _vendor.icalevents import icalevents
 
 from enums import StudioEventType, Instrument
 from events import StudioEvent

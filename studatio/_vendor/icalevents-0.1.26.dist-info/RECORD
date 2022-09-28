@@ -1,0 +1,15 @@
+icalevents-0.1.26.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+icalevents-0.1.26.dist-info/LICENSE,sha256=XUHmhScwCibuflCpmy0JLKKoOyxlKmjroSXYhEhn5dY,1070
+icalevents-0.1.26.dist-info/METADATA,sha256=dukDTZhJCuVb9z7H2yNvUKrZLf6TE0XKhDGiKjCW87I,1737
+icalevents-0.1.26.dist-info/RECORD,,
+icalevents-0.1.26.dist-info/REQUESTED,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+icalevents-0.1.26.dist-info/WHEEL,sha256=gSF7fibx4crkLz_A-IKR6kcuq0jJ64KNCkG8_bcaEao,88
+icalevents-0.1.26.dist-info/direct_url.json,sha256=D6Wjow4QxLzN6wm3YP0LnR1X-Bzyos-jiSzhuWqi2MA,134
+icalevents/__init__.py,sha256=MyZf6Sw9evQRVF0tHkDm_fn030I0qK2ZkcZZUkmAy2k,142
+icalevents/__pycache__/__init__.cpython-310.pyc,,
+icalevents/__pycache__/icaldownload.cpython-310.pyc,,
+icalevents/__pycache__/icalevents.cpython-310.pyc,,
+icalevents/__pycache__/icalparser.cpython-310.pyc,,
+icalevents/icaldownload.py,sha256=zEcJHHpaGvsj0ZV1kY1zuJj2tLCLYaIXeI6GGsHH2Y4,2931
+icalevents/icalevents.py,sha256=39NxcvhSckvvMIcqT6Ibo0prOp3WhtKtrKJETRnfDUA,3771
+icalevents/icalparser.py,sha256=Xqij7wzYuOzSIlwlEQCvnaMfo6eXC1Mr02Xeehtx734,18614
