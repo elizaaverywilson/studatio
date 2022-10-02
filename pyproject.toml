@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "studatio"
-version = "0.1.2"
+version = "0.1.4"
 description = "Personal tool for my violin teaching database"
 authors = ["Eliza Wilson <elizaaverywilson@gmail.com>"]
 license = "MIT"
@@ -24,7 +24,7 @@ pytz = "==2021.3"
 DateTime = "^4.7"
 
 [tool.poetry.scripts]
-studatio = 'studatio:main'
+studatio = 'studatio.main:main'
 
 [build-system]
 requires = ["poetry-core"]
