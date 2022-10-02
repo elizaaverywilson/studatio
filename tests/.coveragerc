@@ -1,0 +1,11 @@
+[report]
+omit =
+    */_vendor/*
+
+exclude_lines =
+    # default exclusion comment
+    pragma: no cover
+
+    except ImportError
+    raise AssertionError
+    raise NotImplementedError

@@ -34,7 +34,7 @@ class TestSimpleEvent:
         assert 'Viola' in str(event)
 
 
-class TestMultiple:
+class TestMultipleInstruments:
     @pytest.fixture
     def event(self, start, end):
         return StudioEvent(start, end, StudioEventType.LESSON, {Instrument.VIOLIN, Instrument.VIOLA,

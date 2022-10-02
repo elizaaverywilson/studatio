@@ -14,8 +14,8 @@ class StudioEvent:
                  plural: object = False):
         if instruments is None:
             instruments = {Instrument.VIOLIN}
-        if start_time.date == end_time.date:
-            raise ValueError('Multi-day events?')
+        if start_time.date() != end_time.date():
+            raise NotImplementedError('Multi-day events are not currently supported.')
         self.start_time = start_time
         self.end_time = end_time
         self.kind = kind
