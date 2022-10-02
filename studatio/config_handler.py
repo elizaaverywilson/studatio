@@ -17,6 +17,7 @@ class Settings:
 
     def setup(self, config):
         """Parses config. Returns True if config needs to be rewritten"""
+        # noinspection PyUnresolvedReferences
         try:
             self.calendar_url = config['calendar']['calendar_URL']
         except tomlkit.exceptions.NonExistentKey:

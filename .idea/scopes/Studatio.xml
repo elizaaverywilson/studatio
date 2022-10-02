@@ -1,3 +1,3 @@
 <component name="DependencyValidationManager">
-  <scope name="Studatio" pattern="file[studatio]:studatio/*" />
+  <scope name="Studatio" pattern="file[studatio]:studatio/*&amp;&amp;!file[studatio]:.idea/*&amp;&amp;!file[studatio]:studatio/_vendor/*" />
 </component>

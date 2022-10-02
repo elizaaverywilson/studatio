@@ -7,6 +7,7 @@ try:
 except ImportError:
     import cal_handler
 
+
 def main():
     if len(sys.argv) == 1:
         export_str = str(cal_handler.export())
