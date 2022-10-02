@@ -294,8 +294,8 @@ def get_timezone(tz_name):
 def adjust_timezone(component, dates, tz=None):
     # Remove timezone if none is present in component
     if (
-        isinstance(component['dtstart'].dt, date)
-        or component['dtstart'].dt.tzinfo is None
+            isinstance(component['dtstart'].dt, date)
+            or component['dtstart'].dt.tzinfo is None
     ):
         dates = [
             date.replace(tzinfo=None) if type(date) is datetime else date
@@ -304,8 +304,8 @@ def adjust_timezone(component, dates, tz=None):
 
     # Add timezone if one is present in component
     if (
-        isinstance(component['dtstart'].dt, datetime)
-        and not component['dtstart'].dt.tzinfo is None
+            isinstance(component['dtstart'].dt, datetime)
+            and not component['dtstart'].dt.tzinfo is None
     ):
         dates = [normalize(date) for date in dates]
 
@@ -450,8 +450,8 @@ def parse_events(content, start=None, end=None, default_span=timedelta(days=7)):
                 exdate = '%04d%02d%02d' % (e.start.year, e.start.month, e.start.day)
                 if exdate not in exceptions:
                     if (
-                        type(e.recurrence_id) == datetime
-                        and type(component.get('dtstart').dt) == datetime
+                            type(e.recurrence_id) == datetime
+                            and type(component.get('dtstart').dt) == datetime
                     ):
                         naive = datetime(
                             e.recurrence_id.year,

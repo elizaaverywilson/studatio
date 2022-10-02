@@ -32,7 +32,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 name = "coverage"
 version = "6.5.0"
 description = "Code coverage measurement for Python"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 
@@ -295,16 +295,16 @@ python-versions = ">=3.6,<4.0"
 name = "vendorize"
 version = "0.2.2"
 description = "Vendorize packages from PyPI"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 develop = false
 
 [package.source]
 type = "git"
-url = "https://github.com/nrosenstein-forks/python-vendorize.git"
-reference = "ecf505c"
-resolved_reference = "ecf505ca36f75a2172a7529b0cc70ef42655f747"
+url = "https://github.com/mwilliamson/python-vendorize"
+reference = "HEAD"
+resolved_reference = "5b522b6637de2bc5cb551adb50960303da1b1a2c"
 
 [[package]]
 name = "virtualenv"
@@ -342,7 +342,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9, <3.11"
-content-hash = "05cff547c747ee0ffaeed6b75633209ea193842c3fe90e6d25652ff4547e2e25"
+content-hash = "b80b32e8a7d0ad0337852504b086ec28d2326214b4c6fd5ad9385560326a5d2a"
 
 [metadata.files]
 attrs = [
