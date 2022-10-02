@@ -1,18 +1,23 @@
 import calendar
 from datetime import datetime
 
-import config_handler
-from config_handler import Settings
-
 try:
-    # for CLI/script access
-    from _vendor.icalevents.icalevents import icalevents
+    # For running via CLI
+    from . import config_handler
+    from .config_handler import Settings
+
+    from ._vendor.icalevents import icalevents
+
+    from .enums import StudioEventType, Instrument
+    from .events import StudioEvent
 except ImportError:
-    # for package access
+    import config_handler
+    from config_handler import Settings
+
     from _vendor.icalevents import icalevents
 
-from enums import StudioEventType, Instrument
-from events import StudioEvent
+    from enums import StudioEventType, Instrument
+    from events import StudioEvent
 
 
 def export(month: int = datetime.now().month, year: int = datetime.now().year):

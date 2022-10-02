@@ -1,6 +1,9 @@
 import datetime
 
-from enums import StudioEventType, Instrument
+try:
+    from .enums import StudioEventType, Instrument
+except ImportError:
+    from enums import StudioEventType, Instrument
 
 
 class StudioEvent:

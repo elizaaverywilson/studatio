@@ -2,8 +2,10 @@ import sys
 
 import pyperclip
 
-import cal_handler
-
+try:
+    from . import cal_handler
+except ImportError:
+    import cal_handler
 
 def main():
     if len(sys.argv) == 1:
