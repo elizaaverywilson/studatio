@@ -2,7 +2,10 @@ import os
 
 import tomlkit
 
-from cfg import CONFIG_DIR
+try:
+    from .cfg import CONFIG_DIR
+except ImportError:
+    from cfg import CONFIG_DIR
 
 
 class Settings:

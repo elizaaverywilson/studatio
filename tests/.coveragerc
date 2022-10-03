@@ -6,6 +6,6 @@ exclude_lines =
     # default exclusion comment
     pragma: no cover
 
-    except ImportError
+    # except ImportError
     raise AssertionError
     raise NotImplementedError
