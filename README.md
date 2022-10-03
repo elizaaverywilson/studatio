@@ -1,5 +1,7 @@
 # studatio
 
+![PyPI](https://img.shields.io/pypi/v/studatio)
+
 studatio is a Python tool for private music teachers to manage their studio's data.
 
 I am primarily developing this for my own use as a violin teacher. However, I hope for the project to become useful to
