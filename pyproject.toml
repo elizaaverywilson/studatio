@@ -1,10 +1,12 @@
 [tool.poetry]
 name = "studatio"
-version = "0.1.4"
+version = "0.1.5"
 description = "Personal tool for my violin teaching database"
 authors = ["Eliza Wilson <elizaaverywilson@gmail.com>"]
 license = "MIT"
 readme = "README.md"
+repository = "https://github.com/elizaaverywilson/studatio"
+
 
 [tool.poetry.dependencies]
 python = ">=3.9, <3.11"
