@@ -9,6 +9,7 @@ try:
 
     from .enums import StudioEventType, Instrument
     from .events import StudioEvent
+    from .storage import load_cached_events
 except ImportError:
     import user_config
     from user_config import Settings
@@ -17,10 +18,12 @@ except ImportError:
 
     from enums import StudioEventType, Instrument
     from events import StudioEvent
+    from storage import load_cached_events
 
 
 def export(month: int = datetime.now().month, year: int = datetime.now().year):
     events = fetch_events(year, month)
+
     parsed_events = parse_events(events)
     combined_events = combine_adjacent_events(parsed_events)
 
@@ -72,37 +75,41 @@ def fetch_events(year: int, month: int):
     return events
 
 
+def _parse_event(ical_event):
+    start_time = ical_event.start
+    end_time = ical_event.end
+    if 'Trial Lesson' in ical_event.summary:
+        kind = StudioEventType.TRIAL_LESSON
+    elif 'Lesson' in ical_event.summary:
+        kind = StudioEventType.LESSON
+    elif 'Class Performance' in ical_event.summary:
+        kind = StudioEventType.CLASS_PERFORMANCE
+    elif 'Class' in ical_event.summary:
+        kind = StudioEventType.CLASS
+    elif 'Dress Recital' in ical_event.summary:
+        kind = StudioEventType.DRESS_RECITAL
+    elif 'Recital' in ical_event.summary:
+        kind = StudioEventType.RECITAL
+    else:
+        print('Alert: OTHER event type')
+        kind = StudioEventType.OTHER
+
+    instruments = set()
+    if 'Violin' in ical_event.summary:
+        instruments.add(Instrument.VIOLIN)
+    if 'Viola' in ical_event.summary:
+        instruments.add(Instrument.VIOLA)
+    if 'Fiddle' in ical_event.summary:
+        instruments.add(Instrument.FIDDLE)
+
+    return StudioEvent(start_time, end_time, kind, instruments)
+
+
 def parse_events(events):
     parsed_events = []
 
-    for event in events:
-        start_time = event.start
-        end_time = event.end
-        if 'Trial Lesson' in event.summary:
-            kind = StudioEventType.TRIAL_LESSON
-        elif 'Lesson' in event.summary:
-            kind = StudioEventType.LESSON
-        elif 'Class Performance' in event.summary:
-            kind = StudioEventType.CLASS_PERFORMANCE
-        elif 'Class' in event.summary:
-            kind = StudioEventType.CLASS
-        elif 'Dress Recital' in event.summary:
-            kind = StudioEventType.DRESS_RECITAL
-        elif 'Recital' in event.summary:
-            kind = StudioEventType.RECITAL
-        else:
-            print('Alert: OTHER event type')
-            kind = StudioEventType.OTHER
-
-        instruments = set()
-        if 'Violin' in event.summary:
-            instruments.add(Instrument.VIOLIN)
-        if 'Viola' in event.summary:
-            instruments.add(Instrument.VIOLA)
-        if 'Fiddle' in event.summary:
-            instruments.add(Instrument.FIDDLE)
-
-        studio_event = StudioEvent(start_time, end_time, kind, instruments)
+    for ical_event in events:
+        studio_event = _parse_event(ical_event)
         parsed_events.append(studio_event)
 
     return parsed_events

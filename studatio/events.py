@@ -53,7 +53,19 @@ class StudioEvent:
 
         time_format = '%I:%M %p'
         return self.date().strftime('%b %d %Y ') + \
-            instr + \
-            str(self.kind) + pl + ' ' + \
-            self.start_time.time().strftime(time_format) + ' to ' + \
-            self.end_time.time().strftime(time_format)
+               instr + \
+               str(self.kind) + pl + ' ' + \
+               self.start_time.time().strftime(time_format) + ' to ' + \
+               self.end_time.time().strftime(time_format)
+
+    def __eq__(self, other):
+        if (
+                self.start_time == other.start_time
+                and self.end_time == other.end_time
+                and self.kind == other.kind
+                and self.instruments == other.instruments
+                and self.plural == other.plural
+        ):
+            return True
+        else:
+            return False

@@ -104,7 +104,7 @@ pytz = "*"
 
 [[package]]
 name = "identify"
-version = "2.5.5"
+version = "2.5.6"
 description = "File identification library for Python"
 category = "dev"
 optional = false
@@ -301,18 +301,18 @@ python-versions = ">=3.6,<4.0"
 
 [[package]]
 name = "vendorize"
-version = "0.2.2"
+version = "0.3.0"
 description = "Vendorize packages from PyPI"
 category = "dev"
 optional = false
-python-versions = "*"
+python-versions = ">=3.5"
 develop = false
 
 [package.source]
 type = "git"
 url = "https://github.com/mwilliamson/python-vendorize"
 reference = "HEAD"
-resolved_reference = "5b522b6637de2bc5cb551adb50960303da1b1a2c"
+resolved_reference = "28c66bbfdc6a46739864a3df8bec60155b0cc50a"
 
 [[package]]
 name = "virtualenv"
@@ -442,8 +442,8 @@ icalendar = [
     {file = "icalendar-4.0.9.tar.gz", hash = "sha256:cc73fa9c848744843046228cb66ea86cd8c18d73a51b140f7c003f760b84a997"},
 ]
 identify = [
-    {file = "identify-2.5.5-py2.py3-none-any.whl", hash = "sha256:ef78c0d96098a3b5fe7720be4a97e73f439af7cf088ebf47b620aeaa10fadf97"},
-    {file = "identify-2.5.5.tar.gz", hash = "sha256:322a5699daecf7c6fd60e68852f36f2ecbb6a36ff6e6e973e0d2bb6fca203ee6"},
+    { file = "identify-2.5.6-py2.py3-none-any.whl", hash = "sha256:b276db7ec52d7e89f5bc4653380e33054ddc803d25875952ad90b0f012cbcdaa" },
+    { file = "identify-2.5.6.tar.gz", hash = "sha256:6c32dbd747aa4ceee1df33f25fed0b0f6e0d65721b15bd151307ff7056d50245" },
 ]
 iniconfig = [
     {file = "iniconfig-1.1.1-py2.py3-none-any.whl", hash = "sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3"},
