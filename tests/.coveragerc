@@ -3,9 +3,10 @@ omit =
     */_vendor/*
 
 exclude_lines =
-    # default exclusion comment
+    # default exclusion
     pragma: no cover
 
-    # except ImportError
+    except ImportError
     raise AssertionError
     raise NotImplementedError
+    input

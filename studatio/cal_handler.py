@@ -78,7 +78,7 @@ def fetch_events(year: int, month: int):
 def _parse_event(ical_event):
     start_time = ical_event.start
     end_time = ical_event.end
-    if 'Trial Lesson' in ical_event.summary:
+    if 'Trial' in ical_event.summary:
         kind = StudioEventType.TRIAL_LESSON
     elif 'Lesson' in ical_event.summary:
         kind = StudioEventType.LESSON
@@ -91,7 +91,6 @@ def _parse_event(ical_event):
     elif 'Recital' in ical_event.summary:
         kind = StudioEventType.RECITAL
     else:
-        print('Alert: OTHER event type')
         kind = StudioEventType.OTHER
 
     instruments = set()

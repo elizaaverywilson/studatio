@@ -9,11 +9,11 @@ except ImportError:
 
 
 class Settings:
-    def __init__(self):
-        if not CONFIG_DIR.exists():
-            os.mkdir(CONFIG_DIR)
+    def __init__(self, config_dir=CONFIG_DIR):
+        if not config_dir.exists():
+            os.mkdir(config_dir)
 
-        self.config_path = CONFIG_DIR / 'config.toml'
+        self.config_path = config_dir / 'config.toml'
 
         if not self.config_path.exists():
             self._create_new_config()
@@ -26,21 +26,22 @@ class Settings:
             config_str = c.read()
         return tomlkit.parse(config_str)
 
+    def _set_calendar_url(self):
+        self.calendar_url = input('Calendar URL:')
+
+    def _default_config(self) -> tomlkit.document():
+        config = tomlkit.document()
+        config.add('title', 'studatio Configuration')
+
+        calendar = tomlkit.table()
+        calendar.add('calendar_URL', self._set_calendar_url())
+        config.add('calendar', calendar)
+
+        return config
+
+    def _write_config(self, config):
+        with open(self.config_path, 'w') as file:
+            file.write(tomlkit.dumps(config))
+
     def _create_new_config(self):
-        def _default_config() -> tomlkit.document():
-            config = tomlkit.document()
-            config.add('title', 'studatio Configuration')
-
-            calendar = tomlkit.table()
-            calendar_url = input('Calendar URL:')
-            calendar.add('calendar_URL', calendar_url)
-            config.add('calendar', calendar)
-
-            return config
-
-        def _write_config(path, config):
-            with open(path, 'w') as file:
-                config = tomlkit.dumps(config)
-                file.write(config)
-
-        _write_config(self.config_path, _default_config())
+        self._write_config(self._default_config())
