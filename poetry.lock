@@ -306,13 +306,6 @@ description = "Vendorize packages from PyPI"
 category = "dev"
 optional = false
 python-versions = ">=3.5"
-develop = false
-
-[package.source]
-type = "git"
-url = "https://github.com/mwilliamson/python-vendorize"
-reference = "HEAD"
-resolved_reference = "28c66bbfdc6a46739864a3df8bec60155b0cc50a"
 
 [[package]]
 name = "virtualenv"
@@ -350,7 +343,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9, <3.11"
-content-hash = "84fd0e4016fc24b5d0ebcb1e45deb472dd4abf1e826cdddd76face31aa348bd0"
+content-hash = "c9d3adba28be840c24d32cbbb93467dd20b08fd64d3bbecbd6753a10f090625d"
 
 [metadata.files]
 appdirs = [
@@ -551,13 +544,16 @@ tomli = [
     {file = "tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
 ]
 tomlkit = [
-    {file = "tomlkit-0.11.5-py3-none-any.whl", hash = "sha256:f2ef9da9cef846ee027947dc99a45d6b68a63b0ebc21944649505bf2e8bc5fe7"},
-    {file = "tomlkit-0.11.5.tar.gz", hash = "sha256:571854ebbb5eac89abcb4a2e47d7ea27b89bf29e09c35395da6f03dd4ae23d1c"},
+    { file = "tomlkit-0.11.5-py3-none-any.whl", hash = "sha256:f2ef9da9cef846ee027947dc99a45d6b68a63b0ebc21944649505bf2e8bc5fe7" },
+    { file = "tomlkit-0.11.5.tar.gz", hash = "sha256:571854ebbb5eac89abcb4a2e47d7ea27b89bf29e09c35395da6f03dd4ae23d1c" },
 ]
-vendorize = []
+vendorize = [
+    { file = "vendorize-0.3.0-py3-none-any.whl", hash = "sha256:d6c163755369d4f6120f3a69b5d2112f04bb124555550b002813265463fb43c9" },
+    { file = "vendorize-0.3.0.tar.gz", hash = "sha256:d3fc6f1ce436887f46b80ed0c13fb546a8201906d6e763d9b2aaf7ec40193792" },
+]
 virtualenv = [
-    {file = "virtualenv-20.16.5-py3-none-any.whl", hash = "sha256:d07dfc5df5e4e0dbc92862350ad87a36ed505b978f6c39609dc489eadd5b0d27"},
-    {file = "virtualenv-20.16.5.tar.gz", hash = "sha256:227ea1b9994fdc5ea31977ba3383ef296d7472ea85be9d6732e42a91c04e80da"},
+    { file = "virtualenv-20.16.5-py3-none-any.whl", hash = "sha256:d07dfc5df5e4e0dbc92862350ad87a36ed505b978f6c39609dc489eadd5b0d27" },
+    { file = "virtualenv-20.16.5.tar.gz", hash = "sha256:227ea1b9994fdc5ea31977ba3383ef296d7472ea85be9d6732e42a91c04e80da" },
 ]
 "zope.interface" = [
     {file = "zope.interface-5.4.0-cp27-cp27m-macosx_10_14_x86_64.whl", hash = "sha256:7df1e1c05304f26faa49fa752a8c690126cf98b40b91d54e6e9cc3b7d6ffe8b7"},
