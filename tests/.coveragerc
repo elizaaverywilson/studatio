@@ -1,3 +1,11 @@
+[paths]
+source =
+    studatio/
+
+[run]
+omit =
+    */_vendor/*
+
 [report]
 omit =
     */_vendor/*

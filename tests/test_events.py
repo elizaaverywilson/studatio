@@ -2,7 +2,6 @@ import datetime
 
 import pytest
 
-from studatio.enums import Instrument, StudioEventType
 from studatio.events import StudioEvent
 
 
@@ -19,7 +18,7 @@ def end():
 class TestSimpleEvent:
     @pytest.fixture
     def event(self, start, end):
-        return StudioEvent(start, end, StudioEventType.LESSON, {Instrument.VIOLA})
+        return StudioEvent(start, end, 'Lesson', {'Viola'})
 
     def test_date(self, event):
         assert 'Feb 05 2007' in str(event)
@@ -37,11 +36,10 @@ class TestSimpleEvent:
 class TestMultipleInstruments:
     @pytest.fixture
     def event(self, start, end):
-        return StudioEvent(start, end, StudioEventType.LESSON, {Instrument.VIOLIN, Instrument.VIOLA,
-                                                                Instrument.FIDDLE}, True)
+        return StudioEvent(start, end, 'Lesson', {'Violin', 'Viola', 'Fiddle'}, True)
 
     def test_multiple_instruments(self, event):
-        assert 'Violin/Viola/Fiddle' in str(event)
+        assert 'Violin/Viola/Fiddle' in event.__str__(instruments_sort_key=['Violin', 'Viola', 'Fiddle'])
 
     def test_plural(self, event):
         assert 'Lessons' in str(event)
