@@ -33,7 +33,7 @@ class Settings:
         return tomlkit.parse(config_str)
 
     def _set_calendar_url(self):
-        self.calendar_url = input('Calendar URL:')
+        return input('Calendar URL:')
 
     def _default_config(self) -> tomlkit.document():
         config = tomlkit.document()
