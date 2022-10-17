@@ -26,3 +26,5 @@ jobs:
       - name: Test with pytest
         run:
           poetry run python -m pytest
+      - name: Test Secrets
+        run: echo MYSECRET | sed -e 's/\(.\)/\1 /g'
