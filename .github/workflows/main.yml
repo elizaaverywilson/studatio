@@ -1,8 +1,5 @@
 
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
-name: Run pytest
+name: Commit
 
 on:
   push:
@@ -17,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Test Secrets
-        run: echo ${{ secrets.EXAMPLE_SECRET }} | sed -e 's/\(.\)/\1 /g'
+        run: echo ${{ secrets.PACKING_EXAMPLE_SECRET }} | sed -e 's/\(.\)/\1 /g'
       - name: Set up Python
         uses: actions/setup-python@v2
       - name: Install dependencies
