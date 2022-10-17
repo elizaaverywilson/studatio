@@ -6,6 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: Test Packaging
     steps:
       - uses: actions/checkout@v2
       - name: Build and publish to pypi
