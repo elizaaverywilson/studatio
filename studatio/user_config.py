@@ -32,6 +32,7 @@ class Settings:
             config_str = c.read()
         return tomlkit.parse(config_str)
 
+    # noinspection PyMethodMayBeStatic
     def _set_calendar_url(self):
         return input('Calendar URL:')
 
