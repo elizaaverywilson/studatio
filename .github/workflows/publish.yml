@@ -1,4 +1,4 @@
-name: Publish to TestPyPi
+name: Publish to PyPi
 on:
   push:
     tags:
@@ -6,12 +6,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: Test Packaging
     steps:
       - uses: actions/checkout@v2
       - name: Build and publish to pypi
         uses: JRubics/poetry-publish@v1.13
         with:
-          pypi_token: ${{ secrets.TESTPYPI_TOKEN }}
-          repository_name: "testpypi"
-          repository_url: "https://test.pypi.org/legacy/"
+          pypi_token: ${{ secrets.PYPI_TOKEN }}
