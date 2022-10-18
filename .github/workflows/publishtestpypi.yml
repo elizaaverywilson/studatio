@@ -15,3 +15,4 @@ jobs:
           pypi_token: ${{ secrets.TESTPYPI_TOKEN }}
           repository_name: "testpypi"
           repository_url: "https://test.pypi.org/legacy/"
+          ignore_dev_requirements: "yes"
