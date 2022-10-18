@@ -10,11 +10,12 @@ Classifier: License :: Other/Proprietary License
 Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
-Requires-Dist: DateTime (==4.3)
-Requires-Dist: httplib2 (==0.20.1)
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: DateTime (>=4.3,<5.0)
+Requires-Dist: httplib2 (>=0.20.4,<0.21.0)
 Requires-Dist: icalendar (==4.0.9)
-Requires-Dist: python-dateutil (==2.8.2)
-Requires-Dist: pytz (==2021.3)
+Requires-Dist: python-dateutil (>=2.8.2,<3.0.0)
+Requires-Dist: pytz (>=2021.3,<2022.0)
 Description-Content-Type: text/markdown
 
 # iCalEvents

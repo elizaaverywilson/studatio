@@ -1,4 +1,4 @@
 target = "studatio/_vendor"
 packages = [
-    "git+https://github.com/jazzband/icalevents#412f256",
+    "git+https://github.com/jazzband/icalevents#bb85bff",
 ]
