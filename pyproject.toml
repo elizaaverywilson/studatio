@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "studatio"
-version = "0.1.9a0"
+version = "0.1.9"
 description = "Personal tool for my violin teaching database"
 authors = ["Eliza Wilson <elizaaverywilson@gmail.com>"]
 license = "MIT"
