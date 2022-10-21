@@ -9,23 +9,27 @@ except ImportError:
 
 
 class Settings:
-    def __init__(self, config_dir=CONFIG_DIR):
-        if not config_dir.exists():
-            os.mkdir(config_dir)
+    def __init__(self, config_dir=CONFIG_DIR, config=None):
+        if config_dir is None:
+            if config is None:
+                config = self._default_config()
+        else:
+            if not config_dir.exists():
+                os.mkdir(config_dir)
 
-        self.config_path = config_dir / 'config.toml'
+            self.config_path = config_dir / 'config.toml'
 
-        if not self.config_path.exists():
-            self._create_new_config()
+            if not self.config_path.exists():
+                self._create_new_config()
 
-        config = self._parse_config()
+            config = self._parse_config()
         # noinspection PyTypeChecker
         self._read_config(config)
 
     def _read_config(self, config: tomlkit.document()):
         self.calendar_url: str = config['calendar_url']
-        self.instruments: set = config['instruments']
-        self.event_types: list = config['event_types']
+        self.instruments: set[str] = config['instruments']
+        self.event_types: list[str] = config['event_types']
 
     def _parse_config(self) -> tomlkit.document():
         with open(self.config_path) as c:

@@ -1,9 +1,14 @@
 import datetime
+from zoneinfo import ZoneInfo
 
 import pytest
 
+# Needs to be changed when icalevents is no longer vendorized
+from studatio.cal_handler import icalevents
+
 from studatio import cal_handler
 from studatio.events import StudioEvent
+from studatio.user_config import Settings
 
 
 @pytest.fixture
@@ -48,10 +53,21 @@ def test_plural(combined_events):
     assert combined_events[0].plural is True
     assert combined_events[1].plural is False
 
-# @pytest.fixture
-# def events_to_parse():
-#    raise NotImplementedError
+
+@pytest.fixture
+def events_to_parse(shared_datadir) -> list[icalevents.Event]:
+    path = (shared_datadir / 'events.ical')
+    downloader = icalevents.ICalDownload()
+    data_str = downloader.data_from_file(path, True)
+    return icalevents.parse_events(data_str, datetime.datetime(2022, 10, 1), datetime.datetime(2022, 11, 1))
 
 
-# def test_parse_events(events_to_parse):
-#    raise NotImplementedError
+def test_parse_events(events_to_parse, monkeypatch):
+    monkeypatch.setattr('studatio.user_config.Settings._set_calendar_url', lambda _: 'calendar.test')
+    settings = Settings(config_dir=None)
+    parsed_events = cal_handler.parse_events(events_to_parse, settings)
+    for event in parsed_events:
+        assert event.instruments == {'Violin'}
+        assert event.event_type == 'Lesson'
+
+    assert parsed_events[0].start_time == datetime.datetime(2022, 10, 5, 12, tzinfo=ZoneInfo('America/Chicago'))

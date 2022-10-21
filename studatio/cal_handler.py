@@ -74,7 +74,7 @@ def fetch_events(year: int, month: int, settings: Settings):
     return events
 
 
-def _parse_event(ical_event, settings: Settings):
+def _parse_event(ical_event: icalevents.Event, settings: Settings) -> StudioEvent:
     start_time = ical_event.start
     end_time = ical_event.end
 
@@ -92,7 +92,7 @@ def _parse_event(ical_event, settings: Settings):
     return StudioEvent(start_time, end_time, event_type, instruments)
 
 
-def parse_events(events: list, settings: Settings):
+def parse_events(events: list[icalevents.Event], settings: Settings) -> list[StudioEvent]:
     parsed_events = []
 
     for ical_event in events:
