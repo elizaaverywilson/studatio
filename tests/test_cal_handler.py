@@ -3,6 +3,9 @@ from zoneinfo import ZoneInfo
 
 import pytest
 
+from hypothesis import given, reject
+from hypothesis.strategies import datetimes, timedeltas
+
 # Needs to be changed when icalevents is no longer vendorized
 from studatio.cal_handler import icalevents
 
@@ -11,18 +14,7 @@ from studatio.events import StudioEvent
 from studatio.user_config import Settings
 
 
-@pytest.fixture
-def start():
-    return datetime.datetime(2021, 9, 3)
-
-
-@pytest.fixture
-def delta():
-    return datetime.timedelta(hours=1)
-
-
-@pytest.fixture
-def combined_events(start, delta):
+def make_combined_events(start, delta):
     event1 = StudioEvent(start_time=start, end_time=start + delta, instruments={'Fiddle'})
     event2 = StudioEvent(start_time=start + delta, end_time=start + 2 * delta, instruments={'Viola'})
     event3 = StudioEvent(start_time=start + 4 * delta, end_time=start + 5 * delta, instruments={'Violin'})
@@ -30,26 +22,21 @@ def combined_events(start, delta):
     return cal_handler.combine_adjacent_events([event1, event2, event3])
 
 
-def test_length(combined_events):
+@given(start=datetimes(), delta=timedeltas(min_value=datetime.timedelta(), max_value=datetime.timedelta(seconds=10000)))
+def test_combined_events(start, delta):
+    combined_events = None
+    try:
+        combined_events = make_combined_events(start, delta)
+    except NotImplementedError:
+        reject()
+
     assert len(combined_events) == 2
-
-
-def test_start_time(start, delta, combined_events):
     assert combined_events[0].start_time == start
     assert combined_events[1].start_time == start + 4 * delta
-
-
-def test_end_time(start, delta, combined_events):
     assert combined_events[0].end_time == start + 2 * delta
     assert combined_events[1].end_time == start + 5 * delta
-
-
-def test_instruments(combined_events):
     assert combined_events[0].instruments == {'Viola', 'Fiddle'}
     assert combined_events[1].instruments == {'Violin'}
-
-
-def test_plural(combined_events):
     assert combined_events[0].plural is True
     assert combined_events[1].plural is False
 

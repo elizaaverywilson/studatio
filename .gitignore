@@ -3,3 +3,5 @@ p30*
 env/**
 .pytest_cache/**
 dist/**
+.hypothesis/*
+!.hypothesis/examples/
