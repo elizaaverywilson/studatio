@@ -2,15 +2,22 @@ import datetime
 
 
 class StudioEvent:
-    def __init__(self, start_time: datetime = datetime.datetime.now(),
-                 end_time: datetime = datetime.datetime.now(),
+    def __init__(self,
+                 start_time: datetime = datetime.datetime.now(),
+                 end_time: datetime = None,
                  event_type: str = None,
-                 instruments: set = None,
-                 plural: object = False):
-        if start_time.date() != end_time.date():
-            raise NotImplementedError('Multi-day events are not currently supported.')
+                 instruments: set = {},
+                 plural: bool = False):
+
         self.start_time = start_time
+        if end_time is None:
+            end_time = start_time + datetime.timedelta(hours=1)
         self.end_time = end_time
+        if start_time.date() != end_time.date():
+            error_msg = ('Multi-day events are not currently supported. start_time = %s, end_time = %s' %
+                         (start_time, end_time))
+            raise NotImplementedError(error_msg)
+
         self.event_type = event_type
         self.instruments = instruments
         self.plural = plural
