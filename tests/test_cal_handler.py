@@ -2,9 +2,9 @@ import datetime
 from zoneinfo import ZoneInfo
 
 import pytest
-
-from hypothesis import given, reject
-from hypothesis.strategies import datetimes, timedeltas
+from _pytest.monkeypatch import MonkeyPatch
+from hypothesis import given, reject, assume
+import hypothesis.strategies as st
 
 # Needs to be changed when icalevents is no longer vendorized
 from studatio.cal_handler import icalevents
@@ -14,15 +14,60 @@ from studatio.events import StudioEvent
 from studatio.user_config import Settings
 
 
+@given(month=st.integers(min_value=1, max_value=12),
+       year=st.integers(min_value=datetime.MINYEAR, max_value=datetime.MAXYEAR))
+def test_check_month_years(month, year):
+    cal_handler.MonthYear(month=month, year=year)
+
+
+@given(month=st.integers(), year=st.integers())
+def test_raises_error_for_invalid_month(month, year):
+    assume(month not in range(1, 13))
+    with pytest.raises(ValueError):
+        cal_handler.MonthYear(month=month, year=year)
+
+
+@given(month=st.integers(), year=st.integers())
+def test_raises_error_for_invalid_year(month, year):
+    assume(year not in range(datetime.MINYEAR, datetime.MAXYEAR))
+    with pytest.raises(ValueError):
+        cal_handler.MonthYear(month=month, year=year)
+
+
+@given(dates_list=st.lists(st.dates()), event_times=st.lists(st.datetimes()))
+def test_export_schedule(dates_list: [datetime.date], event_times):
+    events = []
+    for event_time in event_times:
+        try:
+            events.append(StudioEvent(start_time=event_time))
+        except NotImplementedError:
+            reject()
+
+    month_years = []
+
+    for date in dates_list:
+        month_years.append(cal_handler.MonthYear(month=date.month, year=date.year))
+
+    # noinspection PyUnusedLocal
+    def mocked_events(month_year, settings):
+        return events
+
+    with MonkeyPatch().context() as mp:
+        mp.setattr('studatio.cal_handler._fetch_parsed', mocked_events)
+        cal_handler.export_schedule(month_years)
+
+
 def make_combined_events(start, delta):
     event1 = StudioEvent(start_time=start, end_time=start + delta, instruments={'Fiddle'})
     event2 = StudioEvent(start_time=start + delta, end_time=start + 2 * delta, instruments={'Viola'})
     event3 = StudioEvent(start_time=start + 4 * delta, end_time=start + 5 * delta, instruments={'Violin'})
 
-    return cal_handler.combine_adjacent_events([event1, event2, event3])
+    # noinspection PyProtectedMember
+    return cal_handler._combine_adjacent_events([event1, event2, event3])
 
 
-@given(start=datetimes(), delta=timedeltas(min_value=datetime.timedelta(), max_value=datetime.timedelta(seconds=10000)))
+@given(start=st.datetimes(), delta=st.timedeltas(min_value=datetime.timedelta(),
+                                                 max_value=datetime.timedelta(seconds=10000)))
 def test_combined_events(start, delta):
     combined_events = None
     try:
@@ -52,7 +97,7 @@ def events_to_parse(shared_datadir) -> list[icalevents.Event]:
 def test_parse_events(events_to_parse, monkeypatch):
     monkeypatch.setattr('studatio.user_config.Settings._set_calendar_url', lambda _: 'calendar.test')
     settings = Settings(config_dir=None)
-    parsed_events = cal_handler.parse_events(events_to_parse, settings)
+    parsed_events = cal_handler._parse_events(events_to_parse, settings)
     for event in parsed_events:
         assert event.instruments == {'Violin'}
         assert event.event_type == 'Lesson'

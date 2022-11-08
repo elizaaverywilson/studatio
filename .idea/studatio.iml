@@ -16,6 +16,7 @@
       <excludeFolder url="file://$MODULE_DIR$/.github" />
       <excludeFolder url="file://$MODULE_DIR$/studatio/.cache" />
       <excludeFolder url="file://$MODULE_DIR$/tests/.hypothesis" />
+      <excludeFolder url="file://$MODULE_DIR$/tests/.cache" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.10 (studatio)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

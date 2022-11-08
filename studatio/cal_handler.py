@@ -1,5 +1,6 @@
 import calendar
-from datetime import datetime
+from datetime import date
+from dataclasses import dataclass
 
 try:
     from . import user_config
@@ -19,22 +20,90 @@ except ImportError:
     from storage import load_cached_events
 
 
-def export(month: int = datetime.now().month, year: int = datetime.now().year):
-    settings = Settings()
+@dataclass(frozen=True)
+class MonthYear:
+    # Raises ValueError if month is not an integer from 1-12 or year is not a valid date year.
+    month: int
+    year: int
 
-    events = fetch_events(year, month, settings)
-
-    parsed_events = parse_events(events, settings)
-    combined_events = combine_adjacent_events(parsed_events)
-
-    event_list_string = ''
-    for event in combined_events:
-        event_list_string = event_list_string + event.__str__([]) + '\n'
-
-    return event_list_string
+    def __post_init__(self):
+        try:
+            date(self.year, self.month, 1)
+        except OverflowError:
+            raise ValueError
 
 
-def combine_adjacent_events(events: list):
+def export_schedule(month_years: [MonthYear]) -> str:
+    events_str = ''
+
+    i = 1
+    for month_year in month_years:
+        if i > 1:
+            events_str += '\n'
+        events_str += _export_month_schedule(month_year)
+        i += 1
+
+    return events_str
+
+
+def _export_month_schedule(month_year: MonthYear) -> str:
+    events = _fetch_combined(month_year, Settings())
+
+    events_str = ''
+    for event in events:
+        events_str += event.__str__([]) + '\n'
+
+    return events_str
+
+
+def _fetch_events(month_year: MonthYear, settings: Settings):
+    cal = calendar.Calendar()
+    month_dates_nearby = cal.itermonthdates(month_year.year, month_year.month)
+    month_dates = []
+
+    for month_date in month_dates_nearby:
+        if month_date.month == month_year.month:
+            month_dates.append(month_date)
+
+    calendar_url = settings.calendar_url
+    events = icalevents.events(url=calendar_url, fix_apple=True, start=month_dates[0], end=month_dates[-1])
+    return events
+
+
+def _parse_event(ical_event: icalevents.Event, settings: Settings) -> StudioEvent:
+    start_time = ical_event.start
+    end_time = ical_event.end
+
+    event_type = None
+    for e_type in settings.event_types:
+        if e_type in ical_event.summary:
+            event_type = e_type
+            break
+
+    instruments = set()
+    for instrument in settings.instruments:
+        if instrument in ical_event.summary:
+            instruments.add(instrument)
+
+    return StudioEvent(start_time, end_time, event_type, instruments)
+
+
+def _parse_events(events: [icalevents.Event], settings: Settings) -> [StudioEvent]:
+    parsed_events = []
+
+    for ical_event in events:
+        studio_event = _parse_event(ical_event, settings)
+        parsed_events.append(studio_event)
+
+    return parsed_events
+
+
+def _fetch_parsed(month_year: MonthYear, settings: Settings) -> [StudioEvent]:
+    fetched_events = _fetch_events(month_year, settings)
+    return _parse_events(fetched_events, settings)
+
+
+def _combine_adjacent_events(events: [StudioEvent]) -> [StudioEvent]:
     events_copy = events
     for event in events_copy:
         try:
@@ -60,43 +129,6 @@ def combine_adjacent_events(events: list):
     return events_copy
 
 
-def fetch_events(year: int, month: int, settings: Settings):
-    cal = calendar.Calendar()
-    month_dates_nearby = cal.itermonthdates(year, month)
-    month_dates = []
-
-    for date in month_dates_nearby:
-        if date.month == month:
-            month_dates.append(date)
-
-    calendar_url = settings.calendar_url
-    events = icalevents.events(url=calendar_url, fix_apple=True, start=month_dates[0], end=month_dates[-1])
-    return events
-
-
-def _parse_event(ical_event: icalevents.Event, settings: Settings) -> StudioEvent:
-    start_time = ical_event.start
-    end_time = ical_event.end
-
-    event_type = None
-    for e_type in settings.event_types:
-        if e_type in ical_event.summary:
-            event_type = e_type
-            break
-
-    instruments = set()
-    for instrument in settings.instruments:
-        if instrument in ical_event.summary:
-            instruments.add(instrument)
-
-    return StudioEvent(start_time, end_time, event_type, instruments)
-
-
-def parse_events(events: list[icalevents.Event], settings: Settings) -> list[StudioEvent]:
-    parsed_events = []
-
-    for ical_event in events:
-        studio_event = _parse_event(ical_event, settings)
-        parsed_events.append(studio_event)
-
-    return parsed_events
+def _fetch_combined(month_year: MonthYear, settings: Settings) -> [StudioEvent]:
+    parsed = _fetch_parsed(month_year, settings)
+    return _combine_adjacent_events(parsed)
