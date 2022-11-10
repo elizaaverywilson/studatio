@@ -33,7 +33,7 @@ class MonthYear:
             raise ValueError
 
 
-def export_schedule(month_years: [MonthYear], settings=Settings()) -> str:
+def export_schedule(month_years: [MonthYear], settings: Settings) -> str:
     events_str = ''
 
     i = 1
@@ -46,7 +46,7 @@ def export_schedule(month_years: [MonthYear], settings=Settings()) -> str:
     return events_str
 
 
-def _export_month_schedule(month_year: MonthYear, settings=Settings()) -> str:
+def _export_month_schedule(month_year: MonthYear, settings: Settings) -> str:
     events = _fetch_combined(month_year, settings)
 
     events_str = ''
