@@ -33,21 +33,21 @@ class MonthYear:
             raise ValueError
 
 
-def export_schedule(month_years: [MonthYear]) -> str:
+def export_schedule(month_years: [MonthYear], settings=Settings()) -> str:
     events_str = ''
 
     i = 1
     for month_year in month_years:
         if i > 1:
             events_str += '\n'
-        events_str += _export_month_schedule(month_year)
+        events_str += _export_month_schedule(month_year, settings)
         i += 1
 
     return events_str
 
 
-def _export_month_schedule(month_year: MonthYear) -> str:
-    events = _fetch_combined(month_year, Settings())
+def _export_month_schedule(month_year: MonthYear, settings=Settings()) -> str:
+    events = _fetch_combined(month_year, settings)
 
     events_str = ''
     for event in events:

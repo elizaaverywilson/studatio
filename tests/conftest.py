@@ -2,5 +2,5 @@ import pytest
 
 
 @pytest.fixture(autouse=True)
-def no_requests(monkeypatch):
+def isolate(monkeypatch):
     monkeypatch.delattr('httplib2.Http.request')

@@ -34,8 +34,13 @@ def test_raises_error_for_invalid_year(month, year):
         cal_handler.MonthYear(month=month, year=year)
 
 
+@pytest.fixture(scope='session')
+def config_dir_path(tmp_path_factory):
+    return tmp_path_factory.mktemp('config')
+
+
 @given(dates_list=st.lists(st.dates()), event_times=st.lists(st.datetimes()))
-def test_export_schedule(dates_list: [datetime.date], event_times):
+def test_export_schedule(dates_list: [datetime.date], event_times, config_dir_path):
     events = []
     for event_time in event_times:
         try:
@@ -52,9 +57,14 @@ def test_export_schedule(dates_list: [datetime.date], event_times):
     def mocked_events(month_year, settings):
         return events
 
+    # noinspection PyUnusedLocal
+    def example_url(string=''):
+        return 'https://example.com'
+
     with MonkeyPatch().context() as mp:
         mp.setattr('studatio.cal_handler._fetch_parsed', mocked_events)
-        cal_handler.export_schedule(month_years)
+        mp.setattr('builtins.input', example_url)
+        cal_handler.export_schedule(month_years, Settings(config_dir=config_dir_path))
 
 
 def make_combined_events(start, delta):
