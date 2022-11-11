@@ -56,7 +56,19 @@ def _export_month_schedule(month_year: MonthYear, settings: Settings) -> str:
     return events_str
 
 
-def _fetch_events(month_year: MonthYear, settings: Settings):
+def _fetch_parsed(month_year: MonthYear, settings: Settings) -> [StudioEvent]:
+    fetched_events = _fetch_events(month_year, settings)
+    return _parse_events(fetched_events, settings)
+
+
+def _fetch_events(month_year: MonthYear, settings: Settings) -> [icalevents.Event]:
+    month_dates = _days_of_month(month_year)
+    calendar_url = settings.calendar_url
+    events = icalevents.events(url=calendar_url, fix_apple=True, start=month_dates[0], end=month_dates[-1])
+    return events
+
+
+def _days_of_month(month_year: MonthYear) -> [date]:
     cal = calendar.Calendar()
     month_dates_nearby = cal.itermonthdates(month_year.year, month_year.month)
     month_dates = []
@@ -65,9 +77,7 @@ def _fetch_events(month_year: MonthYear, settings: Settings):
         if month_date.month == month_year.month:
             month_dates.append(month_date)
 
-    calendar_url = settings.calendar_url
-    events = icalevents.events(url=calendar_url, fix_apple=True, start=month_dates[0], end=month_dates[-1])
-    return events
+    return month_dates
 
 
 def _parse_event(ical_event: icalevents.Event, settings: Settings) -> StudioEvent:
@@ -96,11 +106,6 @@ def _parse_events(events: [icalevents.Event], settings: Settings) -> [StudioEven
         parsed_events.append(studio_event)
 
     return parsed_events
-
-
-def _fetch_parsed(month_year: MonthYear, settings: Settings) -> [StudioEvent]:
-    fetched_events = _fetch_events(month_year, settings)
-    return _parse_events(fetched_events, settings)
 
 
 def _combine_adjacent_events(events: [StudioEvent]) -> [StudioEvent]:

@@ -36,14 +36,18 @@ class Settings:
             config_str = c.read()
         return tomlkit.parse(config_str)
 
-    # noinspection PyMethodMayBeStatic
     def _set_calendar_url(self):
-        return input('Calendar URL:')
+        url = input('Calendar URL:')
+
+        if url is '':
+            raise ValueError('URL cannot be empty!')
+        self.calendar_url = url
 
     def _default_config(self) -> tomlkit.document():
         config = tomlkit.document()
         config.add('title', 'studatio Configuration')
-        config.add('calendar_url', self._set_calendar_url())
+        self._set_calendar_url()
+        config.add('calendar_url', self.calendar_url)
         config.add('instruments', ['Violin', 'Viola', 'Fiddle'])
         config.add('event_types', ['Trial Lesson', 'Lesson', 'Class Performance', 'Class', 'Dress Recital', 'Recital'])
 

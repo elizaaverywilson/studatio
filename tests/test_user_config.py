@@ -8,7 +8,23 @@ def config_dir(tmp_path):
     return tmp_path / '.config'
 
 
-def test_create_new_config(config_dir, monkeypatch):
-    monkeypatch.setattr('studatio.user_config.Settings._set_calendar_url', lambda _: 'calendar.test')
-    settings = Settings(config_dir)
-    assert settings._parse_config() == settings._default_config()
+def test_create_new_config(config_dir):
+    # noinspection PyUnusedLocal
+    def example_url(dummy):
+        return 'https://examplecalendar.com'
+
+    with pytest.MonkeyPatch().context() as mp:
+        mp.setattr('builtins.input', example_url)
+        settings = Settings(config_dir)
+        assert settings._parse_config() == settings._default_config()
+
+
+def test_empty_url_error(config_dir):
+    # noinspection PyUnusedLocal
+    def example_url(dummy):
+        return ''
+
+    with pytest.MonkeyPatch().context() as mp:
+        mp.setattr('builtins.input', example_url)
+        with pytest.raises(ValueError):
+            Settings(config_dir)
