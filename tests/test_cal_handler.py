@@ -12,7 +12,10 @@ from studatio import cal_handler
 from studatio.events import StudioEvent
 from studatio.user_config import Settings
 
-from conftest import st_example_url
+try:
+    from .conftest import st_example_url
+except ImportError:
+    from conftest import st_example_url
 
 
 @st.composite

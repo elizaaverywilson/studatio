@@ -39,7 +39,7 @@ class Settings:
     def _set_calendar_url(self):
         url = input('Calendar URL:')
 
-        if url is '':
+        if url == '':
             raise ValueError('URL cannot be empty!')
         self.calendar_url = url
 
