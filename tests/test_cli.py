@@ -8,8 +8,8 @@ from click.testing import CliRunner
 from hypothesis import given
 import hypothesis.strategies as st
 
-from cal_handler import MonthYear
-from main import schedule
+from studatio.cal_handler import MonthYear
+from studatio.main import schedule
 # See https://youtrack.jetbrains.com/issue/PY-53913/ModuleNotFoundError-No-module-named-pydevtestspython
 from .conftest import st_month_year
 
