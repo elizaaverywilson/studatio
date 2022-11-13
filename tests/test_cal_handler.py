@@ -13,17 +13,9 @@ from studatio.events import StudioEvent
 from studatio.user_config import Settings
 
 try:
-    from .conftest import st_example_url
+    from .conftest import st_example_url, st_month_year
 except ImportError:
-    from conftest import st_example_url
-
-
-@st.composite
-def st_month_year(draw):
-    month = draw(st.integers(min_value=1, max_value=12))
-    # year max_value must be below MAXYEAR, because calendar.itermonth may return dates one year higher.
-    year = draw(st.integers(min_value=datetime.MINYEAR, max_value=datetime.MAXYEAR - 1))
-    return cal_handler.MonthYear(month, year)
+    from conftest import st_example_url, st_month_year
 
 
 @hyp.given(month_year=st_month_year())
@@ -64,12 +56,10 @@ def test_export_schedule(dates_list, event_times, config_dir_path, url):
     for date in dates_list:
         month_years.append(cal_handler.MonthYear(month=date.month, year=date.year))
 
-    # noinspection PyUnusedLocal
-    def mocked_events(month_year: cal_handler.MonthYear, settings: Settings):
+    def mocked_events(*_):
         return events
 
-    # noinspection PyUnusedLocal
-    def example_url(dummy_arg):
+    def example_url(_):
         return url
 
     with MonkeyPatch().context() as mp:
@@ -134,7 +124,6 @@ def event_str(shared_datadir) -> str:
 # pytest plugin we can not change the scope.
 @hyp.given(a_url=st_example_url())
 def test_fetch_parsed(event_str, a_url):
-    # noinspection PyUnusedLocal
     def ical_parse_mocked(
             url: str, fix_apple: bool, start: datetime.date, end: datetime.date) -> [icalevents.Event]:
         assert url == a_url
@@ -142,8 +131,7 @@ def test_fetch_parsed(event_str, a_url):
 
         return icalevents.parse_events(event_str, start, end)
 
-    # noinspection PyUnusedLocal
-    def example_url(dummy) -> str:
+    def example_url(_) -> str:
         return a_url
 
     with MonkeyPatch().context() as mp:

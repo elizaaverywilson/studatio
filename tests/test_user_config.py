@@ -9,8 +9,7 @@ def config_dir(tmp_path):
 
 
 def test_create_new_config(config_dir):
-    # noinspection PyUnusedLocal
-    def example_url(dummy):
+    def example_url(_):
         return 'https://examplecalendar.com'
 
     with pytest.MonkeyPatch().context() as mp:
@@ -20,8 +19,7 @@ def test_create_new_config(config_dir):
 
 
 def test_empty_url_error(config_dir):
-    # noinspection PyUnusedLocal
-    def example_url(dummy):
+    def example_url(_):
         return ''
 
     with pytest.MonkeyPatch().context() as mp:

@@ -1,38 +1,33 @@
-import sys
+import datetime
 
+import click
 import pyperclip
 
 try:
     from . import cal_handler
+    from .user_config import Settings
 except ImportError:
     import cal_handler
+    from user_config import Settings
 
 
+@click.group(help="Python tool for private music teachers to manage their studio's data.")
+@click.version_option()
 def main():
-    if len(sys.argv) == 1:
-        export_str = str(cal_handler.export())
-    elif len(sys.argv) == 2 or len(sys.argv) == 3:
-        month_str = sys.argv[1]
-        try:
-            int(month_str)
-            months = [int(month_str)]
-        except ValueError:
-            month_bounds = month_str.split('-')
-            months = list(range(int(month_bounds[0]), int(month_bounds[1]) + 1))
-        export_str = ''
-        i = 1
-        for month in months:
-            if i > 1:
-                export_str += '\n'
-            if len(sys.argv) == 2:
-                export_str += str(cal_handler.export(month))
-            else:
-                export_str += str(cal_handler.export(month, int(sys.argv[2])))
-            i += 1
-    else:
-        raise AttributeError()
-    print(export_str)
-    pyperclip.copy(export_str)
+    pass
+
+
+@main.command(help='prints and copies to clipboard a formatted list of studio events.')
+@click.option('--month', default=datetime.date.today().month, help='int representing a month of the year to export')
+@click.option('--year', default=datetime.date.today().year, help='int representing a year to export')
+def schedule(month: int, year: int):
+    month_year = cal_handler.MonthYear(month, year)
+    output(cal_handler.export_schedule([month_year], Settings()))
+
+
+def output(result: str):
+    pyperclip.copy(result)
+    click.echo(result)
 
 
 if __name__ == '__main__':
