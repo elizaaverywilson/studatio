@@ -3,10 +3,7 @@ import datetime
 import pytest
 import hypothesis.strategies as st
 
-try:
-    from .cal_handler import MonthYear
-except ImportError:
-    from cal_handler import MonthYear
+from studatio.cal_handler import MonthYear
 
 
 @pytest.fixture(autouse=True)
