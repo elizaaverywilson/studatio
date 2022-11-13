@@ -1,8 +1,12 @@
+import datetime
+
 import pytest
 import hypothesis.strategies as st
 
-import datetime
-from cal_handler import MonthYear
+try:
+    from .cal_handler import MonthYear
+except ImportError:
+    from cal_handler import MonthYear
 
 
 @pytest.fixture(autouse=True)
