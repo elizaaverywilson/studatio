@@ -5,7 +5,7 @@ import datetime
 from _pytest.monkeypatch import MonkeyPatch
 from cli_test_helpers import shell
 from click.testing import CliRunner
-from hypothesis import given
+from hypothesis import given, reproduce_failure
 import hypothesis.strategies as st
 
 from studatio.cal_handler import MonthYear
@@ -60,8 +60,8 @@ def test_schedule(month_year_input, use_month, use_year, data):
         to_print = printing
 
     with MonkeyPatch().context() as mp:
-        mp.setattr('cal_handler.export_schedule', mocked_export_schedule)
-        mp.setattr('main.output', mocked_output)
+        mp.setattr('studatio.cal_handler.export_schedule', mocked_export_schedule)
+        mp.setattr('studatio.main.output', mocked_output)
 
         runner = CliRunner()
 
