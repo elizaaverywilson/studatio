@@ -67,6 +67,8 @@ def test_schedule(month_year_input, use_month, use_year, data):
 
         # Act
         # noinspection PyTypeChecker
+        print(schedule)
+        print(arguments)
         results = runner.invoke(schedule, arguments)
 
     # Assert
