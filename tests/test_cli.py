@@ -69,12 +69,12 @@ def test_schedule(month_year_input, use_month, use_year, data):
 
         # Act
         # noinspection PyTypeChecker
-        note(schedule)
-        note(arguments)
+        note('Command:' + str(schedule))
+        note('Arguments:' + str(arguments))
         results = runner.invoke(schedule, arguments)
 
     # Assert
-    note(results)
+    note('Results:' + str(results))
     assert results.exit_code == 0
     assert inputted_month_years == [expected_input]
     assert to_print == data
