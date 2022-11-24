@@ -5,7 +5,7 @@ import datetime
 from _pytest.monkeypatch import MonkeyPatch
 from cli_test_helpers import shell
 from click.testing import CliRunner
-from hypothesis import given, reproduce_failure
+from hypothesis import given
 import hypothesis.strategies as st
 
 from studatio.cal_handler import MonthYear
