@@ -5,7 +5,7 @@ import datetime
 from _pytest.monkeypatch import MonkeyPatch
 from cli_test_helpers import shell
 from click.testing import CliRunner
-from hypothesis import given, reproduce_failure
+from hypothesis import given
 import hypothesis.strategies as st
 
 from studatio.cal_handler import MonthYear
@@ -30,7 +30,6 @@ def test_version():
 # Tests whether `studatio schedule` command plugs correct inputs in to `export_schedule`
 # Provides --month and --year based on `use_month` or `use_year.
 # `studatio schedule` should default to inputting current month/year
-@reproduce_failure('6.58.0', b'AAAAAAAAAAA=')
 @given(month_year_input=st_month_year(), use_month=st.booleans(), use_year=st.booleans(), data=st.binary())
 def test_schedule(month_year_input, use_month, use_year, data):
     # Arrange
@@ -71,7 +70,7 @@ def test_schedule(month_year_input, use_month, use_year, data):
         results = runner.invoke(schedule, arguments)
 
     # Assert
-    print(results.exit_code)
+    print(results)
     assert results.exit_code == 0
     assert inputted_month_years == [expected_input]
     assert to_print == data
