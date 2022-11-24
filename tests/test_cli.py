@@ -32,7 +32,7 @@ def test_version():
 # `studatio schedule` should default to inputting current month/year
 # @reproduce_failure('6.58.0', b'AAAAAAAAAAA=')
 @given(month_year_input=st_month_year(), use_month=st.booleans(), use_year=st.booleans(), data=st.binary())
-@settings(verbosity=Verbosity.verbose)
+@settings(verbosity=Verbosity.verbose, max_examples=1)
 def test_schedule(month_year_input, use_month, use_year, data):
     # Arrange
     arguments = []
