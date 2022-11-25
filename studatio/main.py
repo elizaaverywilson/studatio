@@ -18,8 +18,10 @@ def main():
 
 
 @main.command(help='prints and copies to clipboard a formatted list of studio events.')
-@click.option('--month', default=datetime.date.today().month, help='int representing a month of the year to export')
-@click.option('--year', default=datetime.date.today().year, help='int representing a year to export')
+@click.option('-m', '--month', default=datetime.date.today().month,
+              help='int representing a month of the year to export. Defaults to current month.')
+@click.option('-y', '--year', default=datetime.date.today().year,
+              help='int representing a year to export. Defaults to current year.')
 def schedule(month: int, year: int):
     month_year = cal_handler.MonthYear(month, year)
     output(cal_handler.export_schedule([month_year], Settings()))

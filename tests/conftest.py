@@ -23,12 +23,12 @@ def config_dir_path(tmp_path_factory):
 
 
 @st.composite
-def st_example_url(draw):
+def st_example_urls(draw):
     return draw(st.text(min_size=1))
 
 
 @st.composite
-def st_month_year(draw):
+def st_month_years(draw):
     month = draw(st.integers(min_value=1, max_value=12))
     # year max_value must be below MAXYEAR, because calendar.itermonth may return dates one year higher.
     year = draw(st.integers(min_value=datetime.MINYEAR, max_value=datetime.MAXYEAR - 1))

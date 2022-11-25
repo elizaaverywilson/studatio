@@ -13,12 +13,12 @@ from studatio.events import StudioEvent
 from studatio.user_config import Settings
 
 try:
-    from .conftest import st_example_url, st_month_year
+    from .conftest import st_example_urls, st_month_years
 except ImportError:
-    from conftest import st_example_url, st_month_year
+    from conftest import st_example_urls, st_month_years
 
 
-@hyp.given(month_year=st_month_year())
+@hyp.given(month_year=st_month_years())
 def test_check_month_years(month_year):
     assert month_year
 
@@ -37,7 +37,8 @@ def test_raises_error_for_invalid_year(month, year):
         cal_handler.MonthYear(month=month, year=year)
 
 
-@hyp.given(dates_list=st.lists(st.dates()), event_times=st.lists(st.datetimes()), url=st_example_url())
+@hyp.settings(max_examples=50)
+@hyp.given(dates_list=st.lists(st.dates()), event_times=st.lists(st.datetimes()), url=st_example_urls())
 def test_export_schedule(dates_list, event_times, url):
     events = []
     for event_time in event_times:
@@ -92,7 +93,7 @@ def test_combined_events(start, delta):
     assert combined_events[1].plural is False
 
 
-@hyp.given(month_year=st_month_year())
+@hyp.given(month_year=st_month_years())
 def test_days_of_month(month_year):
     month_dates = cal_handler._days_of_month(month_year)
 
@@ -117,7 +118,7 @@ def event_str(shared_datadir) -> str:
 @hyp.settings(suppress_health_check=[hyp.HealthCheck.function_scoped_fixture], max_examples=15)
 # We can suppress here because event_str does not need to be reset between tests, and since shared_datadir is from a
 # pytest plugin we can not change the scope.
-@hyp.given(a_url=st_example_url())
+@hyp.given(a_url=st_example_urls())
 def test_fetch_parsed(event_str, a_url):
     def ical_parse_mocked(
             url: str, fix_apple: bool, start: datetime.date, end: datetime.date) -> [icalevents.Event]:
