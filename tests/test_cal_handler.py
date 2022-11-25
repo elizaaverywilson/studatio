@@ -114,7 +114,7 @@ def event_str(shared_datadir) -> str:
     return data_str
 
 
-@hyp.settings(suppress_health_check=[hyp.HealthCheck.function_scoped_fixture])
+@hyp.settings(suppress_health_check=[hyp.HealthCheck.function_scoped_fixture], max_examples=15)
 # We can suppress here because event_str does not need to be reset between tests, and since shared_datadir is from a
 # pytest plugin we can not change the scope.
 @hyp.given(a_url=st_example_url())
