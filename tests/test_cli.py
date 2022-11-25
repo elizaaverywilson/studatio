@@ -6,10 +6,11 @@ import hypothesis.strategies as st
 from _pytest.monkeypatch import MonkeyPatch
 from cli_test_helpers import shell
 from click.testing import CliRunner
-from hypothesis import given, note
+from hypothesis import given, settings, HealthCheck
+import pyperclip
 
 from studatio.cal_handler import MonthYear
-from studatio.main import schedule
+import studatio.main as main
 # See https://youtrack.jetbrains.com/issue/PY-53913/ModuleNotFoundError-No-module-named-pydevtestspython
 from .conftest import st_month_year, st_example_url
 
@@ -72,13 +73,21 @@ def test_schedule(month_year_input, use_month, use_year, data, a_url):
 
         # Act
         # noinspection PyTypeChecker
-        results = runner.invoke(schedule, arguments)
+        results = runner.invoke(main.schedule, arguments)
 
     # Assert
-    note('Results:' + str(results))
     assert results.exit_code == 0
     assert inputted_month_years == [expected_input]
     assert to_print == data
+
+
+@settings(suppress_health_check=[HealthCheck.function_scoped_fixture], max_examples=20)
+@given(output_str=st.text())
+def test_output(output_str, capsys):
+    main.output(output_str)
+
+    assert pyperclip.paste() == output_str
+    assert capsys.readouterr().out.rstrip('\r\n') == output_str.rstrip('\r\n')
 
 # See https://github.com/painless-software/python-cli-test-helpers/issues/25
 # def test_command(command='schedule'):
