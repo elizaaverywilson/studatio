@@ -26,7 +26,11 @@ def schedule(month: int, year: int):
 
 
 def output(result: str):
-    pyperclip.copy(result)
+    try:
+        pyperclip.copy(result)
+    except pyperclip.PyperclipException:
+        pass
+
     click.echo(result)
 
 

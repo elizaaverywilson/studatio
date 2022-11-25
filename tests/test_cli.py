@@ -7,7 +7,6 @@ from _pytest.monkeypatch import MonkeyPatch
 from cli_test_helpers import shell
 from click.testing import CliRunner
 from hypothesis import given, settings, HealthCheck
-import pyperclip
 
 from studatio.cal_handler import MonthYear
 import studatio.main as main
@@ -86,7 +85,6 @@ def test_schedule(month_year_input, use_month, use_year, data, a_url):
 def test_output(output_str, capsys):
     main.output(output_str)
 
-    assert pyperclip.paste() == output_str
     assert capsys.readouterr().out.rstrip('\r\n') == output_str.rstrip('\r\n')
 
 # See https://github.com/painless-software/python-cli-test-helpers/issues/25
