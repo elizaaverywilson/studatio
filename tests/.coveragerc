@@ -18,3 +18,5 @@ exclude_lines =
     raise AssertionError
     raise NotImplementedError
     input
+    pass
+    if __name__ == '__main__':

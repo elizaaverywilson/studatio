@@ -37,13 +37,8 @@ def test_raises_error_for_invalid_year(month, year):
         cal_handler.MonthYear(month=month, year=year)
 
 
-@pytest.fixture(scope='session')
-def config_dir_path(tmp_path_factory):
-    return tmp_path_factory.mktemp('config')
-
-
 @hyp.given(dates_list=st.lists(st.dates()), event_times=st.lists(st.datetimes()), url=st_example_url())
-def test_export_schedule(dates_list, event_times, config_dir_path, url):
+def test_export_schedule(dates_list, event_times, url):
     events = []
     for event_time in event_times:
         try:
@@ -65,7 +60,7 @@ def test_export_schedule(dates_list, event_times, config_dir_path, url):
     with MonkeyPatch().context() as mp:
         mp.setattr('studatio.cal_handler._fetch_parsed', mocked_events)
         mp.setattr('builtins.input', example_url)
-        cal_handler.export_schedule(month_years, Settings(config_dir=config_dir_path))
+        cal_handler.export_schedule(month_years, Settings())
 
 
 def make_combined_events(start, delta):
@@ -138,7 +133,7 @@ def test_fetch_parsed(event_str, a_url):
         mp.setattr('builtins.input', example_url)
         mp.setattr('studatio.cal_handler.icalevents.events', ical_parse_mocked)
 
-        settings = Settings(config_dir=None)
+        settings = Settings(use_config_dir=False)
         month_year = cal_handler.MonthYear(10, 2022)
         parsed_events = cal_handler._fetch_parsed(month_year, settings)
 

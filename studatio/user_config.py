@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 import tomlkit
 
@@ -7,17 +8,25 @@ try:
 except ImportError:
     from cfg import CONFIG_DIR
 
+_CONFIG_DIR_VAR = 'STUDATIO_CONFIG'
+
+
+def set_config_path(config_dir: Path = CONFIG_DIR):
+    os.environ[_CONFIG_DIR_VAR] = str(config_dir)
+
 
 class Settings:
-    def __init__(self, config_dir=CONFIG_DIR, config=None):
-        if config_dir is None:
+    def __init__(self, config: tomlkit.document() = None, use_config_dir: bool = True):
+        if use_config_dir is False:
             if config is None:
                 config = self._default_config()
         else:
-            if not config_dir.exists():
-                os.mkdir(config_dir)
+            _config_dir = Path(os.environ.get(_CONFIG_DIR_VAR))
 
-            self.config_path = config_dir / 'config.toml'
+            if not _config_dir.exists():
+                os.mkdir(_config_dir)
+
+            self.config_path = _config_dir / 'config.toml'
 
             if not self.config_path.exists():
                 self._create_new_config()
@@ -53,7 +62,7 @@ class Settings:
 
         return config
 
-    def _write_config(self, config):
+    def _write_config(self, config: tomlkit.document()):
         with open(self.config_path, 'w') as file:
             file.write(tomlkit.dumps(config))
 
