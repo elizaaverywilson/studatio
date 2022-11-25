@@ -5,7 +5,7 @@
 `studatio` is a Python tool for private music teachers to manage their studio's data.
 
 I am primarily developing this for my own use as a violin teacher. However, I hope for the project to become useful to
-other teachers. Currently, studatio pulls and formats iCal data about music lessons for use in lesson schedules or
+other teachers. Currently, studatio pulls and formats Apple iCal data about music lessons for use in lesson schedules or
 facility reservations. I hope to add support for automated facility reservations, billing, and note-taking.
 
 ## Installation
@@ -42,7 +42,8 @@ Jan 28 2022 Viola Lesson 05:30 PM to 06:15 PM
 
 ## Contributing
 
-To build, you must install poetry and pre-commit. Pull requests are welcome. Documentation and test changes are just as
+To build, you must install [poetry](https://python-poetry.org/) and [pre-commit](https://pre-commit.com/). Pull requests
+are welcome. Documentation and test changes are just as
 welcome as changes to source code.
 
 I am an amateur programmer, but I always want to learn, so if there are things that work but are not best practices, I
