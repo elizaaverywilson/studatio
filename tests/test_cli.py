@@ -33,14 +33,22 @@ def st_month_opts(draw):
     Strategy for generating a month argument.
 
     Returns either None, or a tuple with the first argument being the name of the option called,
-    and the second being the month.
+    and the second being the month, or a string in the form of an integer month, a hyphen, and another integer.
     """
     if draw(st.booleans()):
         if draw(st.booleans()):
             opt_str = '-m'
         else:
             opt_str = '--month'
-        return tuple([opt_str, draw(st.integers(1, 12))])
+        if draw(st.booleans()):
+            value = draw(st.integers(1, 12))
+        else:
+            first_month = draw(st.integers(1, 11))
+            second_month = draw(st.integers(2, 12))
+            if first_month >= second_month:
+                hyp.reject()
+            value = str(first_month) + '-' + str(second_month)
+        return tuple([opt_str, value])
     else:
         return None
 
@@ -69,7 +77,7 @@ def test_schedule(month_opt, year_opt, data, url):
     """
     Tests whether `studatio schedule` command plugs correct inputs in to `export_schedule`
 
-    Calls with --month or --year arguments
+    Calls with --month and/or --year arguments
 
     Tests that `studatio schedule` should default to inputting current month/year
     """
@@ -78,18 +86,27 @@ def test_schedule(month_opt, year_opt, data, url):
     inputted_month_years = None
     to_print = None
     today = datetime.datetime.today()
+    expected_input = []
 
-    if month_opt is not None:
-        expected_input_month = month_opt[1]
-        arguments += [month_opt[0], month_opt[1]]
-    else:
-        expected_input_month = today.month
     if year_opt is not None:
         expected_input_year = year_opt[1]
         arguments += [year_opt[0], year_opt[1]]
     else:
         expected_input_year = today.year
-    expected_input = MonthYear(expected_input_month, expected_input_year)
+
+    if month_opt is not None:
+        arguments.insert(0, month_opt[0])
+        arguments.insert(1, month_opt[1])
+        if type(month_opt[1]) is int:
+            months_range = [month_opt[1]]
+        else:
+            months_range_extremes = str(month_opt[1]).split('-')
+            months_range = range(int(months_range_extremes[0]), int(months_range_extremes[1]) + 1)
+
+        for month in months_range:
+            expected_input += [MonthYear(month, expected_input_year)]
+    else:
+        expected_input = [MonthYear(today.month, expected_input_year)]
 
     def mocked_export_schedule(*args) -> [MonthYear]:
         nonlocal inputted_month_years
@@ -116,8 +133,37 @@ def test_schedule(month_opt, year_opt, data, url):
 
     # Assert
     assert results.exit_code == 0
-    assert inputted_month_years == [expected_input]
+    assert inputted_month_years == expected_input
     assert to_print == data
+
+
+@st.composite
+def st_invalid_month_range_opt(draw):
+    if draw(st.booleans()):
+        opt_str = '-m'
+    else:
+        opt_str = '--month'
+
+    first_month = draw(st.integers())
+    second_month = draw(st.integers())
+    if 1 <= first_month < second_month <= 12:
+        hyp.reject()
+    value = str(first_month) + '-' + str(second_month)
+
+    return tuple([opt_str, value])
+
+
+@hyp.given(month_opt=st_invalid_month_range_opt(), year_opt=st_year_opts())
+def test_schedule_throws_for_invalid_month_range(month_opt, year_opt):
+    arguments = [month_opt[0], month_opt[1]]
+    if year_opt is not None:
+        arguments += [year_opt[0], year_opt[1]]
+
+    runner = CliRunner()
+    # noinspection PyTypeChecker
+    results = runner.invoke(main.schedule, arguments)
+
+    assert results.exit_code != 0
 
 
 @hyp.settings(suppress_health_check=[hyp.HealthCheck.function_scoped_fixture], max_examples=20)
