@@ -30,12 +30,27 @@ def schedule(month: str, year: int):
         months_range += [one_month]
     except ValueError:
         months_range_extremes = month.split('-')
-        months_range = range(int(months_range_extremes[0]), int(months_range_extremes[1]) + 1)
+        start_month = int(months_range_extremes[0])
+        end_month = int(months_range_extremes[1])
+        if validate_months(start_month, end_month) is False:
+            raise ValueError
+
+        months_range = range(start_month, end_month + 1)
 
     for a_month in months_range:
         month_years += [cal_handler.MonthYear(a_month, year)]
 
     output(cal_handler.export_schedule(month_years, Settings()))
+
+
+def validate_months(start_month: int, end_month: int) -> bool:
+    months_valid = True
+    if start_month >= end_month:
+        months_valid = False
+    for month in [start_month, end_month]:
+        if month < 1 or month > 12:
+            months_valid = False
+    return months_valid
 
 
 def output(result: str):

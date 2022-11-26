@@ -21,7 +21,7 @@ class Settings:
             if config is None:
                 config = self._default_config()
         else:
-            if os.environ.get(_CONFIG_DIR_VAR) is None:
+            if os.environ.get(_CONFIG_DIR_VAR) == 'None':
                 set_config_path()
 
             _config_dir = Path(os.environ.get(_CONFIG_DIR_VAR))
