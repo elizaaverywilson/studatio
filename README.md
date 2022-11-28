@@ -6,11 +6,14 @@
 
 I am primarily developing this for my own use as a violin teacher. However, I hope for the project to become useful to
 other teachers. Currently, studatio pulls and formats Apple iCal data about music lessons for use in lesson schedules or
-facility reservations. I hope to add support for automated facility reservations, billing, and note-taking.
+facility reservations.
+
+I hope to add support for automated facility reservations, expanded business statistics, billing, and note-taking.
 
 ## Installation
 
-First, install Python if it is not already installed. Use the package manager [pip](https://pip.pypa.io/en/stable/) to
+First, [install Python](https://www.python.org/downloads/) if it is not already installed. Use the package
+manager [pip](https://pip.pypa.io/en/stable/) to
 install studatio.
 
 ```bash
@@ -22,13 +25,36 @@ On first use, studatio will prompt you for a URL containing iCal data of your st
 ## Usage
 
 ```
-studatio schedule [OPTIONS]
+Usage: studatio schedule [OPTIONS]
+
+  Prints and copies to clipboard a formatted list of
+  studio events.
+
 Options:
-  --month INTEGER  int representing a month of the year to export
-  --year INTEGER   int representing a year to export
+  -m, --month TEXT    Integer, or range of ints
+                      separated by a hyphen,
+                      representing a month/s of the
+                      year. Defaults to current
+                      month.
+  -y, --year INTEGER  Defaults to current year.
 ```
 
-Example:
+```
+Usage: studatio elapsed [OPTIONS]
+
+  Prints the time elapsed of events in the given
+  period
+
+Options:
+  -m, --month TEXT    Integer, or range of ints
+                      separated by a hyphen,
+                      representing a month/s of the
+                      year. Defaults to current
+                      month.
+  -y, --year INTEGER  Defaults to current year.
+```
+
+Examples:
 
 ```
 % studatio schedule --month 1 --year 2022
@@ -39,6 +65,8 @@ Jan 18 2022 Violin Lesson 06:05 PM to 06:35 PM
 Jan 21 2022 Violin Lessons 03:30 PM to 05:30 PM
 Jan 28 2022 Viola Lesson 05:30 PM to 06:15 PM
 ```
+
+`studatio schedule -m 10-12`
 
 ## Contributing
 

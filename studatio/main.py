@@ -17,12 +17,29 @@ def main():
     pass
 
 
-@main.command(help='prints and copies to clipboard a formatted list of studio events.')
+@main.command(help='Prints and copies to clipboard a formatted list of studio events.')
 @click.option('-m', '--month', default=str(datetime.date.today().month),
-              help='int, or range of ints, representing a month/s of the year to export. Defaults to current month.')
+              help='Integer, or range of ints separated by a hyphen, representing a month/s of the year. '
+                   'Defaults to current month.')
 @click.option('-y', '--year', default=datetime.date.today().year,
-              help='int representing a year to export. Defaults to current year.')
+              help='Defaults to current year.')
 def schedule(month: str, year: int):
+    month_years = parse_month_and_year_opts(month, year)
+    output(cal_handler.export_schedule(month_years, Settings()))
+
+
+@main.command(help='Prints the time elapsed of events in the given period')
+@click.option('-m', '--month', default=str(datetime.date.today().month),
+              help='Integer, or range of ints separated by a hyphen, representing a month/s of the year. '
+                   'Defaults to current month.')
+@click.option('-y', '--year', default=datetime.date.today().year,
+              help='Defaults to current year.')
+def elapsed(month: str, year: int):
+    month_years = parse_month_and_year_opts(month, year)
+    click.echo(cal_handler.elapsed_in_months(month_years, Settings()))
+
+
+def parse_month_and_year_opts(month: str, year: int) -> [cal_handler.MonthYear]:
     months_range = []
     month_years = []
     try:
@@ -39,8 +56,7 @@ def schedule(month: str, year: int):
 
     for a_month in months_range:
         month_years += [cal_handler.MonthYear(a_month, year)]
-
-    output(cal_handler.export_schedule(month_years, Settings()))
+    return month_years
 
 
 def validate_months(start_month: int, end_month: int) -> bool:

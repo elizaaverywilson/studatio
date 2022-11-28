@@ -1,5 +1,5 @@
 import calendar
-from datetime import date
+from datetime import date, timedelta
 from dataclasses import dataclass
 
 try:
@@ -54,6 +54,14 @@ def _export_month_schedule(month_year: MonthYear, settings: Settings) -> str:
         events_str += event.__str__([]) + '\n'
 
     return events_str
+
+
+def elapsed_in_months(month_years: [MonthYear], settings: Settings) -> timedelta:
+    pass
+
+
+def _elapsed_worked_in_month(month_years: MonthYear, settings: Settings) -> timedelta:
+    pass
 
 
 def _fetch_parsed(month_year: MonthYear, settings: Settings) -> [StudioEvent]:
