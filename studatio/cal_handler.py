@@ -60,8 +60,13 @@ def elapsed_in_months(month_years: [MonthYear], settings: Settings) -> timedelta
     pass
 
 
-def _elapsed_worked_in_month(month_years: MonthYear, settings: Settings) -> timedelta:
-    pass
+def _add_elapsed_from_events(events: [StudioEvent]) -> timedelta:
+    delta_sum = timedelta(0)
+
+    for event in events:
+        delta_sum += event.end_time - event.start_time
+
+    return delta_sum
 
 
 def _fetch_parsed(month_year: MonthYear, settings: Settings) -> [StudioEvent]:

@@ -37,16 +37,23 @@ def test_raises_error_for_invalid_year(month, year):
         cal_handler.MonthYear(month=month, year=year)
 
 
-@hyp.settings(max_examples=50)
-@hyp.given(dates_list=st.lists(st.dates()), event_times=st.lists(st.datetimes()), url=st_example_urls())
-def test_export_schedule(dates_list, event_times, url):
+@st.composite
+def st_studio_events(draw):
+    event_times = draw(st.lists(st.datetimes()))
     events = []
+
     for event_time in event_times:
         try:
             events.append(StudioEvent(start_time=event_time))
         except NotImplementedError:
             hyp.reject()
 
+    return events
+
+
+@hyp.settings(max_examples=50)
+@hyp.given(dates_list=st.lists(st.dates()), events=st_studio_events(), url=st_example_urls())
+def test_export_schedule(dates_list, events, url):
     month_years = []
 
     for date in dates_list:
@@ -62,6 +69,21 @@ def test_export_schedule(dates_list, event_times, url):
         mp.setattr('studatio.cal_handler._fetch_parsed', mocked_events)
         mp.setattr('builtins.input', example_url)
         cal_handler.export_schedule(month_years, Settings())
+
+
+@hyp.given(events=st_studio_events(), data=st.data())
+def test_add_elasped_from_events(events, data):
+    delta_sum = datetime.timedelta(0)
+
+    for event in events:
+        delta = data.draw(st.timedeltas(min_value=datetime.timedelta(0), max_value=datetime.timedelta(hours=6)))
+        try:
+            event.end_time = event.start_time + delta
+        except NotImplementedError:
+            delta = event.end_time - event.start_time
+        delta_sum += delta
+
+    assert cal_handler._add_elapsed_from_events(events) == delta_sum
 
 
 def make_combined_events(start, delta):
