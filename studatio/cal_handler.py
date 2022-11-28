@@ -56,8 +56,19 @@ def _export_month_schedule(month_year: MonthYear, settings: Settings) -> str:
     return events_str
 
 
+def format_hours_minutes(delta: timedelta) -> [int]:
+    if delta < timedelta(0):
+        raise ValueError
+    return [delta.days * 24 + delta.seconds // 3600, (delta.seconds // 60) % 60]
+
+
 def elapsed_in_months(month_years: [MonthYear], settings: Settings) -> timedelta:
-    pass
+    delta_sum = timedelta(0)
+
+    for month_year in month_years:
+        delta_sum += _add_elapsed_from_events(_fetch_parsed(month_year, settings))
+
+    return delta_sum
 
 
 def _add_elapsed_from_events(events: [StudioEvent]) -> timedelta:

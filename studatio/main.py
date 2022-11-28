@@ -36,7 +36,12 @@ def schedule(month: str, year: int):
               help='Defaults to current year.')
 def elapsed(month: str, year: int):
     month_years = parse_month_and_year_opts(month, year)
-    click.echo(cal_handler.elapsed_in_months(month_years, Settings()))
+    time_elapsed = cal_handler.elapsed_in_months(month_years, Settings())
+    hours_minutes_elapsed = cal_handler.format_hours_minutes(time_elapsed)
+
+    hours_elapsed = hours_minutes_elapsed[0]
+    minutes_elapsed = hours_minutes_elapsed[1]
+    click.echo(str(hours_elapsed) + ' Hours, ' + str(minutes_elapsed) + ' Minutes Elapsed')
 
 
 def parse_month_and_year_opts(month: str, year: int) -> [cal_handler.MonthYear]:

@@ -71,6 +71,36 @@ def test_export_schedule(dates_list, events, url):
         cal_handler.export_schedule(month_years, Settings())
 
 
+@hyp.settings(max_examples=50)
+@hyp.given(dates_list=st.lists(st.dates()), events=st_studio_events(), url=st_example_urls(), data=st.data())
+def test_elapsed_in_months(dates_list, events, url, data):
+    month_years = []
+
+    for date in dates_list:
+        month_years.append(cal_handler.MonthYear(month=date.month, year=date.year))
+
+    def mocked_events(*_):
+        return events
+
+    def example_url(_):
+        return url
+
+    delta_sum = datetime.timedelta(0)
+
+    for event in events:
+        delta = data.draw(st.timedeltas(min_value=datetime.timedelta(minutes=1), max_value=datetime.timedelta(hours=6)))
+        try:
+            event.end_time = event.start_time + delta
+        except NotImplementedError:
+            delta = event.end_time - event.start_time
+        delta_sum += delta
+
+    with MonkeyPatch().context() as mp:
+        mp.setattr('studatio.cal_handler._fetch_parsed', mocked_events)
+        mp.setattr('builtins.input', example_url)
+        assert cal_handler.elapsed_in_months(month_years, Settings()) == delta_sum
+
+
 @hyp.given(events=st_studio_events(), data=st.data())
 def test_add_elasped_from_events(events, data):
     delta_sum = datetime.timedelta(0)
@@ -113,6 +143,14 @@ def test_combined_events(start, delta):
     assert combined_events[1].instruments == {'Violin'}
     assert combined_events[0].plural is True
     assert combined_events[1].plural is False
+
+
+@hyp.given(hours=st.integers(min_value=0, max_value=1000000), minutes=st.integers(min_value=0, max_value=59))
+def test_format_hours_minutes(hours, minutes):
+    delta = datetime.timedelta(hours=hours, minutes=minutes)
+    hours_minutes = cal_handler.format_hours_minutes(delta)
+    assert hours_minutes[0] == hours
+    assert hours_minutes[1] == minutes
 
 
 @hyp.given(month_year=st_month_years())
