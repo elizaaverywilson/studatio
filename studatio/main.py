@@ -3,13 +3,13 @@ import datetime
 import click
 import pyperclip
 
-import events
-
 try:
     from . import cal_handler
     from .user_config import Settings
+    from .events import MonthYear
 except ImportError:
     import cal_handler
+    from events import MonthYear
     from user_config import Settings
 
 
@@ -46,7 +46,7 @@ def elapsed(month: str, year: int):
     click.echo(str(hours_elapsed) + ' Hours, ' + str(minutes_elapsed) + ' Minutes Elapsed')
 
 
-def parse_month_and_year_opts(month: str, year: int) -> [events.MonthYear]:
+def parse_month_and_year_opts(month: str, year: int) -> [MonthYear]:
     months_range = []
     month_years = []
     try:
@@ -62,7 +62,7 @@ def parse_month_and_year_opts(month: str, year: int) -> [events.MonthYear]:
         months_range = range(start_month, end_month + 1)
 
     for a_month in months_range:
-        month_years += [events.MonthYear(a_month, year)]
+        month_years += [MonthYear(a_month, year)]
     return month_years
 
 
