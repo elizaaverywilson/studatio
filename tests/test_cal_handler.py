@@ -14,7 +14,7 @@ from studatio.user_config import Settings
 
 try:
     from strategies import st_example_urls, st_month_years, st_hours, st_minutes, st_studio_events
-except ImportError:
+except ImportError or ModuleNotFoundError:
     from .strategies import st_example_urls, st_month_years, st_hours, st_minutes, st_studio_events
 
 

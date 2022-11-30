@@ -3,7 +3,7 @@ import datetime
 import hypothesis as hyp
 from hypothesis import strategies as st
 
-from events import StudioEvent, MonthYear
+from studatio.events import StudioEvent, MonthYear
 
 
 @st.composite

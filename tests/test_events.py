@@ -2,9 +2,7 @@ import datetime
 
 import pytest
 import hypothesis as hyp
-import hypothesis.strategies as st
 
-import cal_handler
 import events
 from studatio.events import StudioEvent
 from .strategies import st_studio_events
