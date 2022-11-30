@@ -8,7 +8,7 @@ from _pytest.monkeypatch import MonkeyPatch
 from cli_test_helpers import shell
 from click.testing import CliRunner
 
-from events import MonthYear
+from studatio.events import MonthYear
 import studatio.main as main
 # See https://youtrack.jetbrains.com/issue/PY-53913/ModuleNotFoundError-No-module-named-pydevtestspython
 from strategies import st_example_urls, st_hours, st_minutes, st_month_opts, st_year_opts

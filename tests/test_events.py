@@ -3,8 +3,7 @@ import datetime
 import pytest
 import hypothesis as hyp
 
-import events
-from studatio.events import StudioEvent
+from studatio.events import StudioEvent, MonthYear
 from .strategies import st_studio_events
 
 
@@ -52,6 +51,6 @@ class TestMultipleInstruments:
 def test_event_month_year(event: StudioEvent):
     month = event.start_time.month
     year = event.start_time.year
-    month_year = events.MonthYear(month, year)
+    month_year = MonthYear(month, year)
 
     assert event.month_year() == month_year
