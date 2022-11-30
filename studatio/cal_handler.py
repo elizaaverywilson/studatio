@@ -1,6 +1,5 @@
 import calendar
 from datetime import date, timedelta
-from dataclasses import dataclass
 
 try:
     from . import user_config
@@ -8,7 +7,7 @@ try:
 
     from ._vendor.icalevents import icalevents
 
-    from .events import StudioEvent
+    from .events import StudioEvent, MonthYear
     from .storage import load_cached_events
 except ImportError:
     import user_config
@@ -16,21 +15,8 @@ except ImportError:
 
     from _vendor.icalevents import icalevents
 
-    from events import StudioEvent
+    from events import StudioEvent, MonthYear
     from storage import load_cached_events
-
-
-@dataclass(frozen=True)
-class MonthYear:
-    # Raises ValueError if month is not an integer from 1-12 or year is not a valid date year.
-    month: int
-    year: int
-
-    def __post_init__(self):
-        try:
-            date(self.year, self.month, 1)
-        except OverflowError:
-            raise ValueError
 
 
 def export_schedule(month_years: [MonthYear], settings: Settings) -> str:
@@ -66,7 +52,8 @@ def elapsed_in_months(month_years: [MonthYear], settings: Settings) -> timedelta
     delta_sum = timedelta(0)
 
     for month_year in month_years:
-        delta_sum += _add_elapsed_from_events(_fetch_parsed(month_year, settings))
+        events = _fetch_parsed(month_year, settings)
+        delta_sum += _add_elapsed_from_events(events)
 
     return delta_sum
 

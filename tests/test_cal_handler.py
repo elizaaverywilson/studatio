@@ -9,13 +9,13 @@ import hypothesis.strategies as st
 from studatio.cal_handler import icalevents
 
 from studatio import cal_handler
-from studatio.events import StudioEvent
+from studatio.events import StudioEvent, MonthYear
 from studatio.user_config import Settings
 
 try:
-    from .conftest import st_example_urls, st_month_years
+    from strategies import st_example_urls, st_month_years, st_hours, st_minutes, st_studio_events
 except ImportError:
-    from conftest import st_example_urls, st_month_years
+    from .strategies import st_example_urls, st_month_years, st_hours, st_minutes, st_studio_events
 
 
 @hyp.given(month_year=st_month_years())
@@ -27,37 +27,23 @@ def test_check_month_years(month_year):
 def test_raises_error_for_invalid_month(month, year):
     hyp.assume(month not in range(1, 13))
     with pytest.raises(ValueError):
-        cal_handler.MonthYear(month=month, year=year)
+        MonthYear(month=month, year=year)
 
 
 @hyp.given(month=st.integers(), year=st.integers())
 def test_raises_error_for_invalid_year(month, year):
     hyp.assume(year not in range(datetime.MINYEAR, datetime.MAXYEAR))
     with pytest.raises(ValueError):
-        cal_handler.MonthYear(month=month, year=year)
-
-
-@st.composite
-def st_studio_events(draw):
-    event_times = draw(st.lists(st.datetimes()))
-    events = []
-
-    for event_time in event_times:
-        try:
-            events.append(StudioEvent(start_time=event_time))
-        except NotImplementedError:
-            hyp.reject()
-
-    return events
+        MonthYear(month=month, year=year)
 
 
 @hyp.settings(max_examples=50)
-@hyp.given(dates_list=st.lists(st.dates()), events=st_studio_events(), url=st_example_urls())
+@hyp.given(dates_list=st.lists(st.dates()), events=st.lists(st_studio_events()), url=st_example_urls())
 def test_export_schedule(dates_list, events, url):
     month_years = []
 
     for date in dates_list:
-        month_years.append(cal_handler.MonthYear(month=date.month, year=date.year))
+        month_years.append(MonthYear(month=date.month, year=date.year))
 
     def mocked_events(*_):
         return events
@@ -72,36 +58,53 @@ def test_export_schedule(dates_list, events, url):
 
 
 @hyp.settings(max_examples=50)
-@hyp.given(dates_list=st.lists(st.dates()), events=st_studio_events(), url=st_example_urls(), data=st.data())
+@hyp.given(dates_list=st.lists(st.dates()), events=st.lists(st_studio_events()), url=st_example_urls(), data=st.data())
 def test_elapsed_in_months(dates_list, events, url, data):
     month_years = []
 
     for date in dates_list:
-        month_years.append(cal_handler.MonthYear(month=date.month, year=date.year))
+        month_years.append(MonthYear(month=date.month, year=date.year))
 
-    def mocked_events(*_):
-        return events
+    def mocked_events(a_month_year, *_):
+        events_to_return = []
+
+        for an_event in events:
+            if event.month_year == a_month_year:
+                events_to_return += an_event
+        return events_to_return
 
     def example_url(_):
         return url
 
-    delta_sum = datetime.timedelta(0)
+    expected_delta_sum = datetime.timedelta(0)
 
     for event in events:
-        delta = data.draw(st.timedeltas(min_value=datetime.timedelta(minutes=1), max_value=datetime.timedelta(hours=6)))
-        try:
-            event.end_time = event.start_time + delta
-        except NotImplementedError:
-            delta = event.end_time - event.start_time
-        delta_sum += delta
+        # We are only looking at events that fall under a month_year in month_years, so let us remove other dates
+        is_event_in_month_years = False
+        for month_year in month_years:
+            if event.start_time.month == month_year.month and event.start_time.year == month_year.year:
+                is_event_in_month_years = True
+                break
+
+        if is_event_in_month_years:
+            delta = data.draw(st.timedeltas(min_value=datetime.timedelta(minutes=1),
+                                            max_value=datetime.timedelta(hours=6)))
+            try:
+                event.end_time = event.start_time + delta
+            except NotImplementedError:
+                delta = event.end_time - event.start_time
+            expected_delta_sum += delta
+            hyp.note('Delta sum' + str(expected_delta_sum))
 
     with MonkeyPatch().context() as mp:
         mp.setattr('studatio.cal_handler._fetch_parsed', mocked_events)
         mp.setattr('builtins.input', example_url)
-        assert cal_handler.elapsed_in_months(month_years, Settings()) == delta_sum
+
+        output_delta_sum = cal_handler.elapsed_in_months(month_years, Settings())
+        assert output_delta_sum == expected_delta_sum
 
 
-@hyp.given(events=st_studio_events(), data=st.data())
+@hyp.given(events=st.lists(st_studio_events()), data=st.data())
 def test_add_elasped_from_events(events, data):
     delta_sum = datetime.timedelta(0)
 
@@ -145,7 +148,7 @@ def test_combined_events(start, delta):
     assert combined_events[1].plural is False
 
 
-@hyp.given(hours=st.integers(min_value=0, max_value=1000000), minutes=st.integers(min_value=0, max_value=59))
+@hyp.given(hours=st_hours(), minutes=st_minutes())
 def test_format_hours_minutes(hours, minutes):
     delta = datetime.timedelta(hours=hours, minutes=minutes)
     hours_minutes = cal_handler.format_hours_minutes(delta)
@@ -195,7 +198,7 @@ def test_fetch_parsed(event_str, a_url):
         mp.setattr('studatio.cal_handler.icalevents.events', ical_parse_mocked)
 
         settings = Settings(use_config_dir=False)
-        month_year = cal_handler.MonthYear(10, 2022)
+        month_year = MonthYear(10, 2022)
         parsed_events = cal_handler._fetch_parsed(month_year, settings)
 
         for event in parsed_events:

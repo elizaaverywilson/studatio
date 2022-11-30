@@ -1,8 +1,13 @@
 import datetime
 
 import pytest
+import hypothesis as hyp
+import hypothesis.strategies as st
 
+import cal_handler
+import events
 from studatio.events import StudioEvent
+from .strategies import st_studio_events
 
 
 @pytest.fixture
@@ -43,3 +48,12 @@ class TestMultipleInstruments:
 
     def test_plural(self, event):
         assert 'Lessons' in str(event)
+
+
+@hyp.given(event=st_studio_events())
+def test_event_month_year(event: StudioEvent):
+    month = event.start_time.month
+    year = event.start_time.year
+    month_year = events.MonthYear(month, year)
+
+    assert event.month_year() == month_year

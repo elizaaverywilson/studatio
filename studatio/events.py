@@ -1,4 +1,11 @@
 import datetime
+from dataclasses import dataclass
+from datetime import date
+
+try:
+    pass
+except ImportError:
+    pass
 
 
 class StudioEvent:
@@ -24,6 +31,11 @@ class StudioEvent:
 
     def date(self):
         return self.start_time.date()
+
+    def month_year(self):
+        month = self.date().month
+        year = self.date().year
+        return MonthYear(month, year)
 
     def __str__(self, instruments_sort_key=None):
         if self.plural is True:
@@ -67,3 +79,16 @@ class StudioEvent:
             return True
         else:
             return False
+
+
+@dataclass(frozen=True)
+class MonthYear:
+    # Raises ValueError if month is not an integer from 1-12 or year is not a valid date year.
+    month: int
+    year: int
+
+    def __post_init__(self):
+        try:
+            date(self.year, self.month, 1)
+        except OverflowError:
+            raise ValueError

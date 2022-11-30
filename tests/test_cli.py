@@ -8,10 +8,10 @@ from _pytest.monkeypatch import MonkeyPatch
 from cli_test_helpers import shell
 from click.testing import CliRunner
 
-from studatio.cal_handler import MonthYear
+from events import MonthYear
 import studatio.main as main
 # See https://youtrack.jetbrains.com/issue/PY-53913/ModuleNotFoundError-No-module-named-pydevtestspython
-from .conftest import st_example_urls
+from strategies import st_example_urls, st_hours, st_minutes, st_month_opts, st_year_opts
 
 
 def test_entrypoint():
@@ -25,50 +25,6 @@ def test_version():
 
     assert result.stdout == f'studatio, version {expected_version}{linesep}'
     assert result.exit_code == 0
-
-
-@st.composite
-def st_month_opts(draw):
-    """
-    Strategy for generating a month argument.
-
-    Returns either None, or a tuple with the first argument being the name of the option called,
-    and the second being the month, or a string in the form of an integer month, a hyphen, and another integer.
-    """
-    if draw(st.booleans()):
-        if draw(st.booleans()):
-            opt_str = '-m'
-        else:
-            opt_str = '--month'
-        if draw(st.booleans()):
-            value = draw(st.integers(1, 12))
-        else:
-            first_month = draw(st.integers(1, 11))
-            second_month = draw(st.integers(2, 12))
-            if first_month >= second_month:
-                hyp.reject()
-            value = str(first_month) + '-' + str(second_month)
-        return tuple([opt_str, value])
-    else:
-        return None
-
-
-@st.composite
-def st_year_opts(draw):
-    """
-    Strategy for generating a year argument.
-
-    Returns either None, or a tuple with the first argument being the name of the option called,
-    and the second being the year.
-    """
-    if draw(st.booleans()):
-        if draw(st.booleans()):
-            opt_str = '-y'
-        else:
-            opt_str = '--year'
-        return tuple([opt_str, draw(st.integers(1, 9999))])
-    else:
-        return None
 
 
 @hyp.settings(max_examples=100)
@@ -138,8 +94,9 @@ def test_schedule(month_opt, year_opt, data, url):
 
 
 @hyp.settings(max_examples=100)
-@hyp.given(month_opt=st_month_opts(), year_opt=st_year_opts(), data=st.binary(), url=st_example_urls())
-def test_elapsed(month_opt, year_opt, data, url):
+@hyp.given(month_opt=st_month_opts(), year_opt=st_year_opts(), hours=st_hours(),
+           minutes=st_minutes(), url=st_example_urls())
+def test_elapsed(month_opt, year_opt, hours, minutes, url):
     """
     Tests whether `studatio elapsed` command plugs correct inputs in to `elapsed`
 
@@ -150,7 +107,7 @@ def test_elapsed(month_opt, year_opt, data, url):
     # Arrange
     arguments = []
     inputted_month_years = None
-    to_print = None
+    to_print = ''
     today = datetime.datetime.today()
     expected_input = []
 
@@ -184,7 +141,7 @@ def test_elapsed(month_opt, year_opt, data, url):
     def mocked_elapsed(*args) -> [MonthYear]:
         nonlocal inputted_month_years
         inputted_month_years = args[0]
-        return data
+        return datetime.timedelta(hours=hours, minutes=minutes)
 
     with MonkeyPatch().context() as mp:
         mp.setattr('studatio.cal_handler.elapsed_in_months', mocked_elapsed)
@@ -200,7 +157,13 @@ def test_elapsed(month_opt, year_opt, data, url):
     # Assert
     assert results.exit_code == 0
     assert inputted_month_years == expected_input
-    assert to_print == data
+
+    # Parse formatted "INT Hours, INT Minutes" string
+    split_strings = to_print.split(sep=' Hours, ')
+    outputted_hours = int(split_strings[0])
+    outputted_minutes = int(split_strings[1].split(' ')[0])
+    assert outputted_hours == hours
+    assert outputted_minutes == minutes
 
 
 @st.composite
