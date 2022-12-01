@@ -68,6 +68,9 @@ Jan 28 2022 Viola Lesson 05:30 PM to 06:15 PM
 
 `studatio schedule -m 10-12`
 
+`% studatio elapsed --month 10 --year 2022
+22 Hours, 0 Minutes Elapsed`
+
 ## Contributing
 
 To build, you must install [poetry](https://python-poetry.org/) and [pre-commit](https://pre-commit.com/). Pull requests
