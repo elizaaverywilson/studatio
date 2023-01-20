@@ -2,14 +2,7 @@
 source =
     studatio/
 
-[run]
-omit =
-    */_vendor/*
-
 [report]
-omit =
-    */_vendor/*
-
 exclude_lines =
     # default exclusion
     pragma: no cover

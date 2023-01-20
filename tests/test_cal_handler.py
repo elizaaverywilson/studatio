@@ -1,12 +1,11 @@
 import datetime
 from zoneinfo import ZoneInfo
+
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
 import hypothesis as hyp
 import hypothesis.strategies as st
-
-# Needs to be changed when icalevents is no longer vendorized
-from studatio.cal_handler import icalevents
+import icalevents.icalevents as icalevents
 
 from studatio import cal_handler
 from studatio.events import StudioEvent, MonthYear

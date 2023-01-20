@@ -1,19 +1,17 @@
 import calendar
 from datetime import date, timedelta
 
+import icalevents.icalevents as icalevents
+
 try:
     from . import user_config
     from .user_config import Settings
-
-    from ._vendor.icalevents import icalevents
 
     from .events import StudioEvent, MonthYear
     from .storage import load_cached_events
 except ImportError:
     import user_config
     from user_config import Settings
-
-    from _vendor.icalevents import icalevents
 
     from events import StudioEvent, MonthYear
     from storage import load_cached_events
