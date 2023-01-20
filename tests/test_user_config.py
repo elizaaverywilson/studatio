@@ -29,6 +29,7 @@ def test_empty_url_error():
 
 
 def test_reset_config_dir_env_var(tmp_path):
+    # Clears the config dir env var so that initiating an instance of Settings will set the env var to the default path.
     set_config_path(None)
 
     def example_url(_) -> str:

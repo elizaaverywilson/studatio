@@ -13,7 +13,7 @@ class StudioEvent:
                  start_time: datetime = datetime.datetime.now(),
                  end_time: datetime = None,
                  event_type: str = None,
-                 instruments: set = {},
+                 instruments: set = None,
                  plural: bool = False):
 
         self.start_time = start_time
@@ -26,7 +26,11 @@ class StudioEvent:
             raise NotImplementedError(error_msg)
 
         self.event_type = event_type
+
+        if instruments is None:
+            instruments = {}
         self.instruments = instruments
+
         self.plural = plural
 
     def date(self):

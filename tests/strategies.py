@@ -81,18 +81,15 @@ def st_studio_events(draw):
     for event_time in event_times:
         try:
             events.append(StudioEvent(start_time=event_time))
+            return events
         except NotImplementedError:
             hyp.reject()
-
-    return events
 
 
 @st.composite
 def st_studio_events(draw):
     event_time = draw(st.datetimes())
     try:
-        event = (StudioEvent(start_time=event_time))
+        return StudioEvent(start_time=event_time)
     except NotImplementedError:
         hyp.reject()
-
-    return event

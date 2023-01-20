@@ -11,7 +11,7 @@ except ImportError:
 _CONFIG_DIR_VAR = 'STUDATIO_CONFIG'
 
 
-def set_config_path(config_dir: Path = CONFIG_DIR):
+def set_config_path(config_dir: Path | None = CONFIG_DIR):
     os.environ[_CONFIG_DIR_VAR] = str(config_dir)
 
 
